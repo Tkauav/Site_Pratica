@@ -1,0 +1,817 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Notícias - Pratica+</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="sidebar-fix.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="bar"><i class="fas fa-bars"></i></div>
+        <div class="menu-text">Menu</div>
+        <div class="title">Pratica <span class="plus">+</span></div>
+        
+        <!-- Botões para usuário não logado -->
+        <div class="header-actions" id="headerActions">
+            <a href="file:///D:/site-novo/login.html" class="btn-login-portal">Login</a>
+            <a href="cadastro.html" class="btn-register-portal">Cadastrar</a>
+        </div>
+        
+        <!-- Área do usuário logado -->
+        <div class="user-area-portal" id="userAreaPortal" style="display: none;">
+            <div class="user-info-portal">
+                <div class="user-avatar-portal">
+                    <span id="userInitialPortal">U</span>
+                </div>
+                <div class="user-details-portal">
+                    <span class="user-name-portal" id="userNamePortal">Usuário</span>
+                    <button class="btn-logout-portal" id="btnLogoutPortal">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sair
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="carousel">
+            <button class="carousel-arrow carousel-prev" aria-label="Slide anterior" onclick="navigateCarousel('prev')" id="prevBtn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-arrow carousel-next" aria-label="Próximo slide" onclick="navigateCarousel('next')" id="nextBtn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <div class="carousel-container">
+                <div class="carousel-slide active">
+                    <img src="https://picsum.photos/seed/dino/1200/680" alt="Dino">
+                    <div class="ad-overlay">
+                        <h3>Bem-vindo ao Pratica+</h3>
+                        <p>Seu portal de esportes!</p>
+                        <button class="ad-btn">Explorar</button>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://picsum.photos/seed/ad1/1200/680" alt="Propaganda 1">
+                    <div class="ad-overlay">
+                        <h3>Nova Academia Pratica+</h3>
+                        <p>Venha treinar conosco!</p>
+                        <button class="ad-btn">Saiba Mais</button>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://picsum.photos/seed/ad2/1200/680" alt="Propaganda 2">
+                    <div class="ad-overlay">
+                        <h3>Equipamentos Esportivos</h3>
+                        <p>Os melhores preços!</p>
+                        <button class="ad-btn">Comprar Agora</button>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://picsum.photos/seed/ad3/1200/680" alt="Propaganda 3">
+                    <div class="ad-overlay">
+                        <h3>Personal Trainer</h3>
+                        <p>Treino personalizado!</p>
+                        <button class="ad-btn">Agendar</button>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://picsum.photos/seed/ad4/1200/680" alt="Propaganda 4">
+                    <div class="ad-overlay">
+                        <h3>Suplementos</h3>
+                        <p>Qualidade garantida!</p>
+                        <button class="ad-btn">Ver Produtos</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="dots">
+            <span class="dot active" data-slide="0"></span>
+            <span class="dot" data-slide="1"></span>
+            <span class="dot" data-slide="2"></span>
+            <span class="dot" data-slide="3"></span>
+            <span class="dot" data-slide="4"></span>
+        </div>
+        
+        <section class="grid">
+            <article class="card" data-article data-title="Majestic BJJ 4 chega com grandes lutas" data-image="https://picsum.photos/seed/sport1/1200/680">
+                <img src="https://picsum.photos/seed/sport1/600/340" alt="Artes Marciais">
+                <div class="body">
+                    <h3>Majestic BJJ 4 chega com grandes lutas e alcance internacional em Manaus-AM</h3>
+                </div>
+            </article>
+            
+            <article class="card" data-article data-title="Aulas de natação na rede municipal" data-image="https://picsum.photos/seed/sport2/1200/680">
+                <img src="https://picsum.photos/seed/sport2/600/340" alt="Natação">
+                <div class="body">
+                    <h3>Prefeitura de Manaus e Aleam oferecem aulas de natação para escola da rede municipal de Educação</h3>
+                </div>
+            </article>
+            
+            <article class="card" data-article data-title="Campeonato de Futebol Amador" data-image="https://picsum.photos/seed/football1/1200/680">
+                <img src="https://picsum.photos/seed/football1/600/340" alt="Futebol">
+                <div class="body">
+                    <h3>Campeonato de Futebol Amador movimenta Manaus com 32 equipes participantes</h3>
+                </div>
+            </article>
+            
+            <article class="card" data-article data-title="Maratona da Amazônia" data-image="https://picsum.photos/seed/running1/1200/680">
+                <img src="https://picsum.photos/seed/running1/600/340" alt="Corrida">
+                <div class="body">
+                    <h3>Maratona da Amazônia atrai corredores de todo o Brasil para Manaus</h3>
+                </div>
+            </article>
+            
+            <article class="card" data-article data-title="Basquete Feminino" data-image="https://picsum.photos/seed/basketball1/1200/680">
+                <img src="https://picsum.photos/seed/basketball1/600/340" alt="Basquete">
+                <div class="body">
+                    <h3>Seleção feminina de basquete de Manaus conquista título estadual</h3>
+                </div>
+            </article>
+            
+            <article class="card" data-article data-title="Vôlei de Praia" data-image="https://picsum.photos/seed/volleyball1/1200/680">
+                <img src="https://picsum.photos/seed/volleyball1/600/340" alt="Vôlei">
+                <div class="body">
+                    <h3>Circuito de Vôlei de Praia movimenta Ponta Negra nos fins de semana</h3>
+                </div>
+            </article>
+            
+            <article class="card" data-article data-title="Tênis de Mesa" data-image="https://picsum.photos/seed/tabletennis1/1200/680">
+                <img src="https://picsum.photos/seed/tabletennis1/600/340" alt="Tênis de Mesa">
+                <div class="body">
+                    <h3>Campeonato de Tênis de Mesa reúne atletas de todas as idades em Manaus</h3>
+                </div>
+            </article>
+            
+            <article class="card" data-article data-title="Ciclismo Urbano" data-image="https://picsum.photos/seed/cycling1/1200/680">
+                <img src="https://picsum.photos/seed/cycling1/600/340" alt="Ciclismo">
+                <div class="body">
+                    <h3>Passeio Ciclístico da Amazônia promove sustentabilidade e esporte</h3>
+                </div>
+            </article>
+            
+            <article class="card" data-article data-title="Handebol Juvenil" data-image="https://picsum.photos/seed/handball1/1200/680">
+                <img src="https://picsum.photos/seed/handball1/600/340" alt="Handebol">
+                <div class="body">
+                    <h3>Seleção juvenil de handebol de Manaus se prepara para competição nacional</h3>
+                </div>
+            </article>
+            
+            <article class="card" data-article data-title="Atletismo Paralímpico" data-image="https://picsum.photos/seed/paralympic1/1200/680">
+                <img src="https://picsum.photos/seed/paralympic1/600/340" alt="Atletismo">
+                <div class="body">
+                    <h3>Atletas paralímpicos de Manaus brilham em competições nacionais</h3>
+                </div>
+            </article>
+            
+            <article class="card" data-article data-title="Futebol de Areia" data-image="https://picsum.photos/seed/beachsoccer1/1200/680">
+                <img src="https://picsum.photos/seed/beachsoccer1/600/340" alt="Futebol de Areia">
+                <div class="body">
+                    <h3>Circuito de Futebol de Areia atrai times de toda a região Norte</h3>
+                </div>
+            </article>
+            
+            <article class="card" data-article data-title="Tênis" data-image="https://picsum.photos/seed/tennis1/1200/680">
+                <img src="https://picsum.photos/seed/tennis1/600/340" alt="Tênis">
+                <div class="body">
+                    <h3>Academia de Tênis de Manaus forma novos talentos para o esporte</h3>
+                </div>
+            </article>
+        </section>
+        
+        <div class="footer"></div>
+    </main>
+    
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- Modal de Login Necessário -->
+    <div class="login-modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fas fa-lock"></i>
+                <h3>Login Necessário</h3>
+            </div>
+            <div class="modal-body">
+                <p>Você precisa estar logado para acessar essa página</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-secondary" id="btnModalCancel">Cancelar</button>
+                <a href="file:///D:/site-novo/login.html" class="btn-modal-primary">Fazer Login</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Sucesso de Cadastro -->
+    <div class="success-modal" id="successModal">
+        <div class="modal-content">
+            <div class="modal-header success-header">
+                <i class="fas fa-check-circle"></i>
+                <h3>Cadastro Realizado!</h3>
+            </div>
+            <div class="modal-body">
+                <p>Seu cadastro foi realizado com sucesso. Agora você pode fazer login para acessar todas as funcionalidades.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-primary" id="btnSuccessOk">Continuar</button>
+            </div>
+        </div>
+    </div>
+    
+    
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-menu" id="closeMenu"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <!-- Seção do usuário logado -->
+        <div class="user-section" id="userSection" style="display: none;">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <span id="userInitial">U</span>
+                </div>
+                <div class="user-details">
+                    <div class="user-name" id="userName">Nome do Usuário</div>
+                    <div class="user-email" id="userEmail">usuario@email.com</div>
+                </div>
+            </div>
+            <div class="user-actions">
+                <button class="btn-logout" id="btnLogout">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
+        </div>
+        
+        <!-- Seção para usuário não logado -->
+        <div class="login-section" id="loginSection">
+            <div class="login-prompt">
+                <i class="fas fa-user-circle"></i>
+                <p>Faça login para personalizar sua experiência</p>
+            </div>
+        </div>
+        
+        <ul class="menu-list">
+            <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+            <li><a href="#" id="sportsLink"><i class="fas fa-futbol"></i> Esportes</a></li>
+            <li><a href="#" id="favoritosLink"><i class="fas fa-heart"></i> Favoritos</a></li>
+        </ul>
+    </aside>
+    
+    <script src="script.js"></script>
+    <script>
+        // Variáveis globais do carrossel
+        let carouselSlides = [];
+        let carouselDots = [];
+        let currentCarouselSlide = 0;
+        let carouselInterval = null;
+        
+        // Função global para navegação do carrossel
+        function navigateCarousel(direction) {
+            console.log('🖱️ Navegação do carrossel:', direction);
+            
+            if (carouselSlides.length === 0) {
+                console.log('Carregando elementos do carrossel...');
+                carouselSlides = document.querySelectorAll('.carousel-slide');
+                carouselDots = document.querySelectorAll('.dot');
+            }
+            
+            if (carouselSlides.length === 0) {
+                console.error('Slides do carrossel não encontrados');
+                return;
+            }
+            
+            // Remover active de todos os slides e dots
+            carouselSlides.forEach(slide => {
+                slide.classList.remove('active', 'prev');
+            });
+            carouselDots.forEach(dot => dot.classList.remove('active'));
+            
+            if (direction === 'prev') {
+                currentCarouselSlide = currentCarouselSlide === 0 ? carouselSlides.length - 1 : currentCarouselSlide - 1;
+            } else if (direction === 'next') {
+                currentCarouselSlide = (currentCarouselSlide + 1) % carouselSlides.length;
+            }
+            
+            // Ativar slide e dot atual
+            if (carouselSlides[currentCarouselSlide]) {
+                carouselSlides[currentCarouselSlide].classList.add('active');
+            }
+            if (carouselDots[currentCarouselSlide]) {
+                carouselDots[currentCarouselSlide].classList.add('active');
+            }
+            
+            console.log('Slide atual:', currentCarouselSlide);
+        }
+        
+        // Carrossel automático de propaganda otimizado com setas
+        document.addEventListener('DOMContentLoaded', function(){
+          const slides = document.querySelectorAll('.carousel-slide');
+          const dots = document.querySelectorAll('.dot');
+          const carousel = document.querySelector('.carousel');
+          const prevBtn = document.querySelector('.carousel-prev');
+          const nextBtn = document.querySelector('.carousel-next');
+          
+          console.log('Carrossel elementos encontrados:', {
+            slides: slides.length,
+            dots: dots.length,
+            carousel: !!carousel,
+            prevBtn: !!prevBtn,
+            nextBtn: !!nextBtn
+          });
+          
+          // Teste detalhado dos elementos
+          console.log('Detalhes dos elementos:');
+          console.log('prevBtn:', prevBtn);
+          console.log('nextBtn:', nextBtn);
+          console.log('prevBtn.style:', prevBtn ? prevBtn.style : 'não encontrado');
+          console.log('nextBtn.style:', nextBtn ? nextBtn.style : 'não encontrado');
+          
+          if (!slides.length || !dots.length || !carousel) {
+            console.error('Elementos do carrossel não encontrados!');
+            return;
+          }
+          
+          if (!prevBtn || !nextBtn) {
+            console.error('Setas do carrossel não encontradas!');
+            return;
+          }
+          
+          let currentSlide = 0;
+          let slideInterval;
+          let isTransitioning = false;
+          let isPaused = false;
+          
+          // Configurações otimizadas
+          const CONFIG = {
+            interval: 5000, // 5 segundos
+            transitionDuration: 400,
+            pauseOnHover: true,
+            pauseOnFocus: true
+          };
+          
+          function showSlide(index) {
+            if (isTransitioning) return;
+            
+            isTransitioning = true;
+            
+            // Remove active de todos os slides e dots
+            slides.forEach(slide => {
+              slide.classList.remove('active', 'prev');
+            });
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            // Adiciona active no slide e dot atual
+            if (slides[index]) {
+              slides[index].classList.add('active');
+            }
+            if (dots[index]) {
+              dots[index].classList.add('active');
+            }
+            
+            currentSlide = index;
+            
+            // Reset da flag após a transição
+            setTimeout(() => {
+              isTransitioning = false;
+            }, CONFIG.transitionDuration);
+          }
+          
+          function nextSlide() {
+            if (isPaused || isTransitioning) return;
+            const next = (currentSlide + 1) % slides.length;
+            showSlide(next);
+          }
+          
+          function prevSlide() {
+            if (isPaused || isTransitioning) return;
+            const prev = currentSlide === 0 ? slides.length - 1 : currentSlide - 1;
+            showSlide(prev);
+          }
+          
+          function startCarousel() {
+            if (slideInterval) clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, CONFIG.interval);
+          }
+          
+          function stopCarousel() {
+            clearInterval(slideInterval);
+            slideInterval = null;
+          }
+          
+          function pauseCarousel() {
+            isPaused = true;
+            stopCarousel();
+          }
+          
+          function resumeCarousel() {
+            isPaused = false;
+            startCarousel();
+          }
+          
+          function resetCarousel() {
+            stopCarousel();
+            startCarousel();
+          }
+          
+          // Event listeners para setas - usando apenas onclick inline
+          console.log('Configurando setas do carrossel');
+          
+          // As setas já têm onclick inline no HTML, então não precisamos de event listeners adicionais
+          console.log('✅ Setas configuradas via onclick inline');
+          
+          // Log de confirmação
+          console.log('✅ Event listeners das setas configurados com sucesso!');
+          
+          // Event listeners para dots
+          dots.forEach((dot, index) => {
+            dot.addEventListener('click', (e) => {
+              e.preventDefault();
+              if (index !== currentSlide && !isTransitioning) {
+                showSlide(index);
+                resetCarousel();
+              }
+            }, { passive: false });
+          });
+          
+          // Navegação por teclado
+          document.addEventListener('keydown', (e) => {
+            if (!carousel.matches(':hover')) return;
+            
+            switch(e.key) {
+              case 'ArrowLeft':
+                e.preventDefault();
+                prevSlide();
+                resetCarousel();
+                break;
+              case 'ArrowRight':
+                e.preventDefault();
+                nextSlide();
+                resetCarousel();
+                break;
+              case ' ':
+                e.preventDefault();
+                if (isPaused) {
+                  resumeCarousel();
+                } else {
+                  pauseCarousel();
+                }
+                break;
+            }
+          });
+          
+          // Pausa/resume no hover
+          if (CONFIG.pauseOnHover) {
+            carousel.addEventListener('mouseenter', pauseCarousel, { passive: true });
+            carousel.addEventListener('mouseleave', resumeCarousel, { passive: true });
+          }
+          
+          // Pausa quando a aba não está visível
+          if (CONFIG.pauseOnFocus) {
+            document.addEventListener('visibilitychange', () => {
+              if (document.hidden) {
+                pauseCarousel();
+              } else {
+                resumeCarousel();
+              }
+            });
+          }
+          
+          // Pausa quando a janela perde o foco
+          window.addEventListener('blur', pauseCarousel, { passive: true });
+          window.addEventListener('focus', resumeCarousel, { passive: true });
+          
+          // Cleanup ao sair da página
+          window.addEventListener('beforeunload', () => {
+            stopCarousel();
+          });
+          
+          // Inicia o carrossel
+          startCarousel();
+          
+          // Teste adicional para verificar se tudo está funcionando
+          console.log('Carrossel inicializado com sucesso!');
+          console.log('Slides disponíveis:', slides.length);
+          console.log('Slide atual:', currentSlide);
+          
+          // Expor controles do carrossel globalmente
+          window.carouselControls = {
+            nextSlide: nextSlide,
+            prevSlide: prevSlide,
+            showSlide: showSlide,
+            resetCarousel: resetCarousel,
+            currentSlide: () => currentSlide
+          };
+          
+          // Teste manual das funções
+          window.testCarousel = {
+            nextSlide: nextSlide,
+            prevSlide: prevSlide,
+            showSlide: showSlide,
+            currentSlide: () => currentSlide
+          };
+          
+          console.log('✅ Controles do carrossel disponíveis em window.carouselControls');
+          console.log('✅ Funções de teste disponíveis em window.testCarousel');
+        });
+        
+        // Gerenciar usuário no sidebar
+        function updateUserSection() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            const userSection = document.getElementById('userSection');
+            const loginSection = document.getElementById('loginSection');
+            
+            if (currentUser) {
+                try {
+                    const user = JSON.parse(currentUser);
+                    
+                    // Mostrar seção do usuário
+                    userSection.style.display = 'block';
+                    loginSection.style.display = 'none';
+                    
+                    // Atualizar informações do usuário
+                    document.getElementById('userName').textContent = user.nome;
+                    document.getElementById('userEmail').textContent = user.email;
+                    
+                    // Atualizar avatar com primeira letra do nome
+                    const userInitial = document.getElementById('userInitial');
+                    userInitial.textContent = user.nome.charAt(0).toUpperCase();
+                    
+                } catch (error) {
+                    console.error('Erro ao carregar dados do usuário:', error);
+                    showLoginSection();
+                }
+            } else {
+                showLoginSection();
+            }
+        }
+        
+        function showLoginSection() {
+            const userSection = document.getElementById('userSection');
+            const loginSection = document.getElementById('loginSection');
+            
+            userSection.style.display = 'none';
+            loginSection.style.display = 'block';
+        }
+        
+        // Botão de logout
+        document.getElementById('btnLogout').addEventListener('click', function() {
+            if (confirm('Tem certeza que deseja sair?')) {
+                sessionStorage.removeItem('currentUser');
+                updateUserSection();
+                alert('Logout realizado com sucesso!');
+            }
+        });
+        
+        // Atualizar seção do usuário ao carregar a página
+        updateUserSection();
+        
+        // Funções do modal de login
+        function showLoginModal() {
+            const modal = document.getElementById('loginModal');
+            modal.classList.add('active');
+        }
+        
+        function hideLoginModal() {
+            const modal = document.getElementById('loginModal');
+            modal.classList.remove('active');
+        }
+        
+        // Funções do modal de sucesso
+        function showSuccessModal() {
+            const modal = document.getElementById('successModal');
+            modal.classList.add('active');
+        }
+        
+        function hideSuccessModal() {
+            const modal = document.getElementById('successModal');
+            modal.classList.remove('active');
+        }
+        
+        
+        // Event listeners para o modal de login
+        document.getElementById('btnModalCancel').addEventListener('click', hideLoginModal);
+        
+        // Fechar modal de login clicando no fundo
+        document.getElementById('loginModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideLoginModal();
+            }
+        });
+        
+        // Event listeners para o modal de sucesso
+        document.getElementById('btnSuccessOk').addEventListener('click', hideSuccessModal);
+        
+        // Fechar modal de sucesso clicando no fundo
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideSuccessModal();
+            }
+        });
+        
+        
+        // Fechar modais com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hideLoginModal();
+                hideSuccessModal();
+            }
+        });
+        
+        // Expor funções globalmente para serem chamadas de outras páginas
+        window.showSuccessModal = showSuccessModal;
+        
+        // Função para simular cadastro bem-sucedido (para teste)
+        function simulateSuccessfulRegistration() {
+            showSuccessModal();
+        }
+        
+        // Expor função de simulação globalmente
+        window.simulateSuccessfulRegistration = simulateSuccessfulRegistration;
+        
+        // Funções para gerenciar mensagem de erro de email
+        function showEmailError(inputElement, message) {
+            console.log('Mostrando erro de email:', message);
+            
+            // Remove mensagem anterior se existir
+            hideEmailError(inputElement);
+            
+            // Cria a mensagem de erro
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'email-error-message show';
+            errorDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+            
+            // Adiciona estilos inline para garantir que apareça
+            errorDiv.style.display = 'block';
+            errorDiv.style.color = '#f44336';
+            errorDiv.style.fontSize = '14px';
+            errorDiv.style.marginTop = '8px';
+            errorDiv.style.padding = '8px 12px';
+            errorDiv.style.background = 'rgba(244, 67, 54, 0.1)';
+            errorDiv.style.border = '1px solid rgba(244, 67, 54, 0.3)';
+            errorDiv.style.borderRadius = '6px';
+            errorDiv.style.width = '100%';
+            errorDiv.style.boxSizing = 'border-box';
+            
+            // Insere após o input
+            if (inputElement.nextSibling) {
+                inputElement.parentNode.insertBefore(errorDiv, inputElement.nextSibling);
+            } else {
+                inputElement.parentNode.appendChild(errorDiv);
+            }
+            
+            console.log('Mensagem de erro adicionada:', errorDiv);
+        }
+        
+        function hideEmailError(inputElement) {
+            const existingError = inputElement.parentNode.querySelector('.email-error-message');
+            if (existingError) {
+                existingError.remove();
+            }
+        }
+        
+        // Expor funções globalmente
+        window.showEmailError = showEmailError;
+        window.hideEmailError = hideEmailError;
+        
+        // Função de teste para verificar se o erro está funcionando
+        function testEmailError() {
+            // Criar um input de teste se não existir
+            let testInput = document.getElementById('testEmailInput');
+            if (!testInput) {
+                testInput = document.createElement('input');
+                testInput.id = 'testEmailInput';
+                testInput.type = 'email';
+                testInput.placeholder = 'Digite seu email';
+                testInput.style.cssText = 'padding: 10px; margin: 10px; border: 1px solid #ccc; border-radius: 4px; width: 200px;';
+                
+                // Adicionar ao body
+                document.body.appendChild(testInput);
+            }
+            
+            // Mostrar erro de teste
+            showEmailError(testInput, 'Este email já está cadastrado');
+        }
+        
+        // Expor função de teste
+        window.testEmailError = testEmailError;
+        
+        // Verificar login apenas para aba Esportes
+        function checkLoginForSports() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                showLoginModal();
+                return false;
+            }
+            return true;
+        }
+        
+        // Event listener para link de Esportes
+        document.getElementById('sportsLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (checkLoginForSports()) {
+                window.location.href = 'esportes.html';
+            }
+        });
+        
+        // Verificar login para Favoritos
+        function checkLoginForFavoritos() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                showLoginModal();
+                return false;
+            }
+            return true;
+        }
+        
+        // Event listener para link de Favoritos
+        document.getElementById('favoritosLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (checkLoginForFavoritos()) {
+                window.location.href = 'favoritos.html';
+            }
+        });
+        
+        // ===== SISTEMA DE USUÁRIO LOGADO NO PORTAL =====
+        
+        // Função para atualizar header baseado no status de login
+        function updatePortalHeaderUserStatus() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            const headerActions = document.getElementById('headerActions');
+            const userAreaPortal = document.getElementById('userAreaPortal');
+            const userNamePortal = document.getElementById('userNamePortal');
+            const userInitialPortal = document.getElementById('userInitialPortal');
+            
+            if (currentUser) {
+                try {
+                    const user = JSON.parse(currentUser);
+                    
+                    // Esconder botões de login e mostrar área do usuário
+                    if (headerActions) {
+                        headerActions.style.display = 'none';
+                        headerActions.style.visibility = 'hidden';
+                        headerActions.style.opacity = '0';
+                    }
+                    
+                    if (userAreaPortal) {
+                        userAreaPortal.style.display = 'flex';
+                        userAreaPortal.style.visibility = 'visible';
+                        userAreaPortal.style.opacity = '1';
+                        userAreaPortal.classList.add('show');
+                    }
+                    
+                    // Atualizar informações do usuário
+                    if (userNamePortal) userNamePortal.textContent = user.nome;
+                    if (userInitialPortal) userInitialPortal.textContent = user.nome.charAt(0).toUpperCase();
+                    
+                } catch (error) {
+                    console.error('Erro ao carregar dados do usuário no portal:', error);
+                    showPortalLoginButtons();
+                }
+            } else {
+                showPortalLoginButtons();
+            }
+        }
+        
+        function showPortalLoginButtons() {
+            const headerActions = document.getElementById('headerActions');
+            const userAreaPortal = document.getElementById('userAreaPortal');
+            
+            if (headerActions) {
+                headerActions.style.display = 'flex';
+                headerActions.style.visibility = 'visible';
+                headerActions.style.opacity = '1';
+            }
+            
+            if (userAreaPortal) {
+                userAreaPortal.style.display = 'none';
+                userAreaPortal.style.visibility = 'hidden';
+                userAreaPortal.style.opacity = '0';
+                userAreaPortal.classList.remove('show');
+            }
+        }
+        
+        // Event listener para botão de logout no portal
+        document.getElementById('btnLogoutPortal').addEventListener('click', function() {
+            if (confirm('Tem certeza que deseja sair?')) {
+                sessionStorage.removeItem('currentUser');
+                updatePortalHeaderUserStatus();
+                alert('Logout realizado com sucesso!');
+            }
+        });
+        
+        // Atualizar header quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePortalHeaderUserStatus();
+        });
+        
+        // Atualizar header quando a página ganhar foco (caso o usuário faça login em outra aba)
+        window.addEventListener('focus', function() {
+            updatePortalHeaderUserStatus();
+        });
+    </script>
+</body>
+</html>

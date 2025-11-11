@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Erro de Email</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input[type="email"]:focus {
+            outline: none;
+            border-color: #00bcd4;
+        }
+        .email-error-message {
+            display: none;
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            border-radius: 6px;
+            animation: slideDown 0.3s ease-out;
+        }
+        .email-error-message.show {
+            display: block !important;
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .btn-test {
+            background: #00bcd4;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .btn-test:hover {
+            background: #00acc1;
+        }
+    </style>
+</head>
+<body>
+    <h2>Teste - Mensagem de Erro de Email</h2>
+    
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="victorpamene@outlook.com">
+        <!-- A mensagem de erro aparecerá aqui -->
+    </div>
+    
+    <button class="btn-test" onclick="mostrarErro()">Mostrar Erro</button>
+    <button class="btn-test" onclick="removerErro()">Remover Erro</button>
+    <button class="btn-test" onclick="testarEmail()">Testar Email</button>
+    
+    <script>
+        // Lista de emails já cadastrados
+        const emailsCadastrados = [
+            'victorpamene@outlook.com',
+            'victorpamene@gmail.com',
+            'teste@email.com',
+            'usuario@exemplo.com'
+        ];
+        
+        // Função para mostrar erro de email
+        function mostrarErro() {
+            const emailInput = document.getElementById('email');
+            const mensagem = 'Este email já está cadastrado. Tente fazer login ou use um email diferente.';
+            
+            // Remove erro anterior se existir
+            removerErro();
+            
+            // Cria a mensagem de erro
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'email-error-message show';
+            errorDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${mensagem}`;
+            
+            // Adiciona estilos inline para garantir que apareça
+            errorDiv.style.cssText = `
+                display: block !important;
+                color: #f44336;
+                font-size: 14px;
+                margin-top: 8px;
+                padding: 8px 12px;
+                background: rgba(244, 67, 54, 0.1);
+                border: 1px solid rgba(244, 67, 54, 0.3);
+                border-radius: 6px;
+                width: 100%;
+                box-sizing: border-box;
+                animation: slideDown 0.3s ease-out;
+            `;
+            
+            // Insere após o input
+            emailInput.parentNode.insertBefore(errorDiv, emailInput.nextSibling);
+            
+            console.log('Erro mostrado:', errorDiv);
+        }
+        
+        // Função para remover erro
+        function removerErro() {
+            const emailInput = document.getElementById('email');
+            const existingError = emailInput.parentNode.querySelector('.email-error-message');
+            if (existingError) {
+                existingError.remove();
+                console.log('Erro removido');
+            }
+        }
+        
+        // Função para testar se email está cadastrado
+        function testarEmail() {
+            const emailInput = document.getElementById('email');
+            const email = emailInput.value.trim();
+            
+            if (emailsCadastrados.includes(email.toLowerCase())) {
+                mostrarErro();
+            } else {
+                removerErro();
+                alert('Email disponível para cadastro!');
+            }
+        }
+        
+        // Verificação em tempo real
+        document.getElementById('email').addEventListener('blur', function() {
+            const email = this.value.trim();
+            if (email && emailsCadastrados.includes(email.toLowerCase())) {
+                mostrarErro();
+            } else {
+                removerErro();
+            }
+        });
+        
+        // Remove erro quando usuário digita
+        document.getElementById('email').addEventListener('input', function() {
+            removerErro();
+        });
+        
+        // Teste automático ao carregar a página
+        window.addEventListener('load', function() {
+            console.log('Página carregada, testando email...');
+            testarEmail();
+        });
+    </script>
+</body>
+</html>
+

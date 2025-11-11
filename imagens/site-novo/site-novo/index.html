@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pratica+ - Acelere sua presença digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <h2>Pratica+</h2>
+            </div>
+            
+            <!-- Botões para usuário não logado -->
+            <div class="nav-actions" id="navActions">
+                <a href="file:///D:/site-novo/login.html" class="btn-login">Login</a>
+                <a href="cadastro.html" class="btn-register">Cadastrar</a>
+            </div>
+            
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Descubra seu esporte ideal!</h1>
+                <p>Conecte-se com esportes personalizados, encontre notícias exclusivas e faça parte de uma comunidade ativa. Tudo isso em um só lugar!</p>
+        <div class="actions">
+            <a class="btn primary" href="portal.html"><i class="fas fa-rocket"></i> Explorar Esportes</a>
+            <a class="btn secondary" href="portal.html"><i class="fas fa-newspaper"></i> Ver Notícias</a>
+        </div>
+            </div>
+        </section>
+        
+        <section class="cta">
+            <!-- Seção de Patrocinadores -->
+            <div class="sponsors-section">
+                <h3>Nossos Parceiros</h3>
+                <div class="sponsors-grid">
+                    <a href="https://www.nike.com.br/" target="_blank" class="sponsor-item">
+                        <div class="sponsor-logo nike">Nike</div>
+                        <span class="sponsor-name">Nike</span>
+                    </a>
+                    <a href="https://www.adidas.com.br/" target="_blank" class="sponsor-item">
+                        <div class="sponsor-logo adidas">Adidas</div>
+                        <span class="sponsor-name">Adidas</span>
+                    </a>
+                    <a href="https://br.puma.com/" target="_blank" class="sponsor-item">
+                        <div class="sponsor-logo puma">Puma</div>
+                        <span class="sponsor-name">Puma</span>
+                    </a>
+                    <a href="https://www.reebok.com.br/" target="_blank" class="sponsor-item">
+                        <div class="sponsor-logo reebok">Reebok</div>
+                        <span class="sponsor-name">Reebok</span>
+                    </a>
+                    <a href="https://www.underarmour.com.br/" target="_blank" class="sponsor-item">
+                        <div class="sponsor-logo under-armour">Under Armour</div>
+                        <span class="sponsor-name">Under Armour</span>
+                    </a>
+                    <a href="https://www.newbalance.com.br/" target="_blank" class="sponsor-item">
+                        <div class="sponsor-logo new-balance">New Balance</div>
+                        <span class="sponsor-name">New Balance</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="site-footer">
+        <small>2025 Pratica+</small>
+    </footer>
+    
+    <script src="script.js"></script>
+    <script>
+        // Função para atualizar header baseado no status de login
+        function updateHeaderUserStatus() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            const navActions = document.getElementById('navActions');
+            
+            // Remover qualquer elemento de usuário da header
+            const header = document.querySelector('.site-header');
+            if (header) {
+                const userArea = header.querySelector('.user-area');
+                const userInfo = header.querySelector('.user-info');
+                const userAvatar = header.querySelector('.user-avatar');
+                const userDetails = header.querySelector('.user-details');
+                const userName = header.querySelector('.user-name');
+                const btnLogout = header.querySelector('.btn-logout');
+                
+                if (userArea) userArea.remove();
+                if (userInfo) userInfo.remove();
+                if (userAvatar) userAvatar.remove();
+                if (userDetails) userDetails.remove();
+                if (userName) userName.remove();
+                if (btnLogout) btnLogout.remove();
+            }
+            
+            if (currentUser) {
+                // Esconder botões de login quando usuário estiver logado
+                if (navActions) {
+                    navActions.style.display = 'none';
+                    navActions.style.visibility = 'hidden';
+                    navActions.style.opacity = '0';
+                }
+            } else {
+                // Mostrar botões de login quando usuário não estiver logado
+                if (navActions) {
+                    navActions.style.display = 'flex';
+                    navActions.style.visibility = 'visible';
+                    navActions.style.opacity = '1';
+                }
+            }
+        }
+        
+        
+        // Atualizar header quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            updateHeaderUserStatus();
+        });
+        
+        // Atualizar header quando a página ganhar foco (caso o usuário faça login em outra aba)
+        window.addEventListener('focus', function() {
+            updateHeaderUserStatus();
+        });
+    </script>
+</body>
+</html>

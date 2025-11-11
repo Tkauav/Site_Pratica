@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favoritos - Pratica+</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .favoritos-container {
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 20px;
+        }
+        
+        .main-layout {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            width: 100%;
+        }
+        
+        .user-profile-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00bcd4, #00acc1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #001018;
+            font-size: 32px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,188,212,0.3);
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1A2332;
+            margin-bottom: 8px;
+        }
+        
+        .profile-email {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .profile-categories {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .category-badge {
+            background: #ff6b35;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .profile-details {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-detail {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        .profile-detail strong {
+            color: #1A2332;
+        }
+        
+        .btn-edit-profile {
+            background: linear-gradient(135deg, #2E3F59, #1e2a3a);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-edit-profile:hover {
+            background: linear-gradient(135deg, #1e2a3a, #0f1a26);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(46,63,89,0.4);
+        }
+        
+        
+        .favoritos-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .favoritos-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1A2332;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .favoritos-count {
+            background: #ff6b35;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .favoritos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            justify-items: center;
+        }
+        
+        @media (min-width: 768px) {
+            .favoritos-grid {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 800px;
+                margin: 0 auto;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .favoritos-grid {
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 1000px;
+            }
+        }
+        
+        .favorito-card {
+            background: #fff;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .favorito-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: #00bcd4;
+            transform: translateY(-5px);
+        }
+        
+        .favorito-card-header {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .favorito-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .favorito-card:hover .favorito-image {
+            transform: scale(1.05);
+        }
+        
+        .favorito-name {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+        
+        .favorito-rating {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .favorito-rating:hover {
+            background: rgba(0,0,0,0.9);
+            transform: scale(1.1);
+        }
+        
+        .rating-star {
+            color: #ff6b35;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .favorito-remove-btn {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,107,53,0.9);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .favorito-remove-btn:hover {
+            background: #ff6b35;
+            transform: scale(1.1);
+        }
+        
+        .favorito-info {
+            padding: 20px;
+        }
+        
+        .favorito-description {
+            color: #7f8c8d;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .favorito-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .favorito-tag {
+            background: #e9ecef;
+            color: #495057;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .empty-favoritos {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+        }
+        
+        .empty-favoritos i {
+            font-size: 64px;
+            color: #dee2e6;
+            margin-bottom: 20px;
+        }
+        
+        .empty-favoritos h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+        
+        .empty-favoritos p {
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .btn-explore {
+            background: linear-gradient(135deg, #00bcd4, #00acc1);
+            color: #001018;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .btn-explore:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,188,212,0.3);
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .main-layout {
+                padding: 0 15px;
+            }
+            
+            .favoritos-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="bar"><i class="fas fa-bars"></i></div>
+        <div class="menu-text">Menu</div>
+        <div class="title">Pratica <span class="plus">+</span></div>
+        <div class="badge">
+            <img src="imagens/logo.jpg" alt="Pratica +" class="logo-img">
+        </div>
+    </header>
+    
+    <div class="favoritos-container">
+        <div class="main-layout">
+            <!-- Conteúdo principal -->
+            <div class="main-content">
+                <!-- Seção do perfil do usuário -->
+                <div class="user-profile-section">
+                    <div class="profile-avatar" id="profileAvatar">U</div>
+                    <div class="profile-info">
+                        <h2 class="profile-name" id="profileName">Nome do Usuário</h2>
+                        <p class="profile-email" id="profileEmail">usuario@email.com</p>
+                        <div class="profile-categories" id="profileCategories">
+                            <!-- Categorias serão inseridas aqui via JavaScript -->
+                        </div>
+                        <div class="profile-details">
+                            <div class="profile-detail">
+                                <strong>Praticando desde:</strong> <span id="joinDate">00/00/0000</span>
+                            </div>
+                            <div class="profile-detail">
+                                <strong>Esporte favorito:</strong> <span id="favoriteSport">xxxxxxx</span>
+                            </div>
+                        </div>
+                        <button class="btn-edit-profile" onclick="window.location.href='cadastro.html?edit=true'">
+                            <i class="fas fa-edit"></i> Editar perfil
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Seção de favoritos -->
+                <div class="favoritos-section">
+                    <h2 class="favoritos-title">
+                        <i class="fas fa-heart"></i> Meus Favoritos
+                        <span class="favoritos-count" id="favoritosCount">0</span>
+                    </h2>
+                    <div class="favoritos-grid" id="favoritosGrid">
+                        <!-- Cards de esportes favoritos serão inseridos aqui via JavaScript -->
+                    </div>
+                    <div class="empty-favoritos" id="emptyFavoritos" style="display: none;">
+                        <i class="fas fa-heart-broken"></i>
+                        <h3>Nenhum esporte favorito ainda</h3>
+                        <p>Explore os esportes disponíveis e marque seus favoritos para vê-los aqui!</p>
+                        <a href="esportes.html" class="btn-explore">
+                            <i class="fas fa-search"></i> Explorar Esportes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-menu" id="closeMenu"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <!-- Seção do usuário logado -->
+        <div class="user-section" id="userSection" style="display: none;">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <span id="userInitial">U</span>
+                </div>
+                <div class="user-details">
+                    <div class="user-name" id="userName">Nome do Usuário</div>
+                    <div class="user-email" id="userEmail">usuario@email.com</div>
+                </div>
+            </div>
+            <div class="user-actions">
+                <button class="btn-logout" id="btnLogout">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
+        </div>
+        
+        <!-- Seção para usuário não logado -->
+        <div class="login-section" id="loginSection">
+            <div class="login-prompt">
+                <i class="fas fa-user-circle"></i>
+                <p>Faça login para personalizar sua experiência</p>
+            </div>
+        </div>
+        
+        <ul class="menu-list">
+            <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+            <li><a href="#" id="sportsLink"><i class="fas fa-futbol"></i> Esportes</a></li>
+            <li><a href="#" id="favoritosLink"><i class="fas fa-heart"></i> Favoritos</a></li>
+        </ul>
+    </aside>
+    
+    <script src="script.js"></script>
+    <script>
+        // Garantir que o sidebar comece fechado
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.remove('active');
+            }
+        });
+        
+        // Verificar se usuário está logado
+        function checkLogin() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                alert('Você precisa fazer login para acessar esta página.');
+                window.location.href = 'login.html';
+                return null;
+            }
+            return JSON.parse(currentUser);
+        }
+        
+        // Carregar dados do usuário
+        function loadUserData() {
+            const user = checkLogin();
+            if (!user) return;
+            
+            // Buscar dados completos do usuário no banco de dados
+            const db = new Database();
+            const fullUserData = db.getUserByEmail(user.email);
+            
+            if (fullUserData) {
+                // Atualizar informações do perfil
+                document.getElementById('profileName').textContent = fullUserData.nome;
+                document.getElementById('profileEmail').textContent = fullUserData.email;
+                document.getElementById('profileAvatar').textContent = fullUserData.nome.charAt(0).toUpperCase();
+                
+                // Data de cadastro formatada
+                const joinDate = new Date(fullUserData.dataCadastro);
+                document.getElementById('joinDate').textContent = joinDate.toLocaleDateString('pt-BR');
+                
+                // Esporte favorito
+                document.getElementById('favoriteSport').textContent = fullUserData.esporteFavorito || 'Não informado';
+                
+                // Categorias selecionadas
+                const categoriesContainer = document.getElementById('profileCategories');
+                if (fullUserData.categorias && fullUserData.categorias.length > 0) {
+                    fullUserData.categorias.forEach(category => {
+                        const badge = document.createElement('div');
+                        badge.className = 'category-badge';
+                        badge.textContent = category.nome;
+                        categoriesContainer.appendChild(badge);
+                    });
+                }
+            }
+        }
+        
+        // Carregar favoritos do usuário
+        function loadFavoritos() {
+            const user = checkLogin();
+            if (!user) return;
+            
+            const favoritos = JSON.parse(localStorage.getItem(`favoritos_${user.email}`) || '[]');
+            const favoritosGrid = document.getElementById('favoritosGrid');
+            const emptyFavoritos = document.getElementById('emptyFavoritos');
+            const favoritosCount = document.getElementById('favoritosCount');
+            
+            // Atualizar contador
+            favoritosCount.textContent = favoritos.length;
+            
+            if (favoritos.length === 0) {
+                favoritosGrid.style.display = 'none';
+                emptyFavoritos.style.display = 'block';
+            } else {
+                favoritosGrid.style.display = 'grid';
+                emptyFavoritos.style.display = 'none';
+                
+                // Limpar grid
+                favoritosGrid.innerHTML = '';
+                
+                // Criar cards dos favoritos
+                favoritos.forEach(esporte => {
+                    const favoritoCard = createFavoritoCard(esporte);
+                    favoritosGrid.appendChild(favoritoCard);
+                });
+            }
+        }
+        
+        // Criar card de favorito
+        function createFavoritoCard(esporte) {
+            const card = document.createElement('div');
+            card.className = 'favorito-card';
+            
+            card.innerHTML = `
+                <div class="favorito-card-header">
+                    <img src="${esporte.image}" alt="${esporte.name}" class="favorito-image">
+                    <div class="favorito-name">${esporte.name}</div>
+                    <div class="favorito-rating">
+                        <i class="fas fa-star rating-star"></i>
+                    </div>
+                    <button class="favorito-remove-btn" onclick="removeFavorito('${esporte.name}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="favorito-info">
+                    <div class="favorito-description">${esporte.description}</div>
+                    <div class="favorito-tags">
+                        ${esporte.tags.map(tag => `<span class="favorito-tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        
+        // Remover favorito
+        function removeFavorito(esporteName) {
+            const user = checkLogin();
+            if (!user) return;
+            
+            if (confirm(`Tem certeza que deseja remover "${esporteName}" dos favoritos?`)) {
+                const favoritos = JSON.parse(localStorage.getItem(`favoritos_${user.email}`) || '[]');
+                const updatedFavoritos = favoritos.filter(esporte => esporte.name !== esporteName);
+                localStorage.setItem(`favoritos_${user.email}`, JSON.stringify(updatedFavoritos));
+                
+                // Recarregar favoritos
+                loadFavoritos();
+                
+                alert('Esporte removido dos favoritos!');
+            }
+        }
+        
+        // Sistema de banco de dados (mesmo do cadastro)
+        class Database {
+            constructor() {
+                this.dbName = 'pratica_plus_users';
+            }
+            
+            getAllUsers() {
+                return JSON.parse(localStorage.getItem(this.dbName) || '[]');
+            }
+            
+            getUserByEmail(email) {
+                const users = this.getAllUsers();
+                return users.find(user => user.email === email);
+            }
+        }
+        
+        // Carregar dados quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            loadFavoritos();
+            setupSidebar();
+        });
+        
+        // Configurar sidebar específico da página
+        function setupSidebar() {
+            // Gerenciar usuário no sidebar
+            updateUserSection();
+            
+            // Botão de logout
+            const btnLogout = document.getElementById('btnLogout');
+            if (btnLogout) {
+                btnLogout.addEventListener('click', function() {
+                    if (confirm('Tem certeza que deseja sair?')) {
+                        sessionStorage.removeItem('currentUser');
+                        updateUserSection();
+                        alert('Logout realizado com sucesso!');
+                    }
+                });
+            }
+            
+            // Event listeners para links do menu
+            const sportsLink = document.getElementById('sportsLink');
+            if (sportsLink) {
+                sportsLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (checkLogin()) {
+                        window.location.href = 'esportes.html';
+                    }
+                });
+            }
+            
+            const favoritosLink = document.getElementById('favoritosLink');
+            if (favoritosLink) {
+                favoritosLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (checkLogin()) {
+                        window.location.href = 'favoritos.html';
+                    }
+                });
+            }
+        }
+        
+        // Gerenciar usuário no sidebar
+        function updateUserSection() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            const userSection = document.getElementById('userSection');
+            const loginSection = document.getElementById('loginSection');
+            
+            if (currentUser) {
+                try {
+                    const user = JSON.parse(currentUser);
+                    
+                    // Mostrar seção do usuário
+                    userSection.style.display = 'block';
+                    loginSection.style.display = 'none';
+                    
+                    // Atualizar informações do usuário
+                    document.getElementById('userName').textContent = user.nome;
+                    document.getElementById('userEmail').textContent = user.email;
+                    
+                    // Atualizar avatar com primeira letra do nome
+                    const userInitial = document.getElementById('userInitial');
+                    userInitial.textContent = user.nome.charAt(0).toUpperCase();
+                    
+                } catch (error) {
+                    console.error('Erro ao carregar dados do usuário:', error);
+                    showLoginSection();
+                }
+            } else {
+                showLoginSection();
+            }
+        }
+        
+        function showLoginSection() {
+            const userSection = document.getElementById('userSection');
+            const loginSection = document.getElementById('loginSection');
+            
+            userSection.style.display = 'none';
+            loginSection.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

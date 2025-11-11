@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Pratica+</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div style="max-width: 600px; margin: 50px auto; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+        <h2>Cadastro</h2>
+        
+        <form id="cadastroForm">
+            <div style="margin-bottom: 20px;">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                <!-- A mensagem de erro aparecerá aqui -->
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            
+            <button type="submit" style="background: #00bcd4; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer;">
+                Cadastrar
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Funções para gerenciar mensagem de erro de email
+        function showEmailError(inputElement, message) {
+            console.log('Mostrando erro de email:', message);
+            
+            // Remove mensagem anterior se existir
+            hideEmailError(inputElement);
+            
+            // Cria a mensagem de erro
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'email-error-message show';
+            errorDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+            
+            // Adiciona estilos inline para garantir que apareça
+            errorDiv.style.display = 'block';
+            errorDiv.style.color = '#f44336';
+            errorDiv.style.fontSize = '14px';
+            errorDiv.style.marginTop = '8px';
+            errorDiv.style.padding = '8px 12px';
+            errorDiv.style.background = 'rgba(244, 67, 54, 0.1)';
+            errorDiv.style.border = '1px solid rgba(244, 67, 54, 0.3)';
+            errorDiv.style.borderRadius = '6px';
+            errorDiv.style.width = '100%';
+            errorDiv.style.boxSizing = 'border-box';
+            
+            // Insere após o input
+            if (inputElement.nextSibling) {
+                inputElement.parentNode.insertBefore(errorDiv, inputElement.nextSibling);
+            } else {
+                inputElement.parentNode.appendChild(errorDiv);
+            }
+            
+            console.log('Mensagem de erro adicionada:', errorDiv);
+        }
+        
+        function hideEmailError(inputElement) {
+            const existingError = inputElement.parentNode.querySelector('.email-error-message');
+            if (existingError) {
+                existingError.remove();
+            }
+        }
+
+        // Simular verificação de email já cadastrado
+        function verificarEmail(email) {
+            // Lista de emails já cadastrados (simulação)
+            const emailsCadastrados = [
+                'victorpamene@gmail.com',
+                'teste@email.com',
+                'usuario@exemplo.com'
+            ];
+            
+            return emailsCadastrados.includes(email);
+        }
+
+        // Event listener para o formulário
+        document.getElementById('cadastroForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const emailInput = document.getElementById('email');
+            const email = emailInput.value;
+            
+            // Remove erro anterior
+            hideEmailError(emailInput);
+            
+            // Verifica se email já está cadastrado
+            if (verificarEmail(email)) {
+                showEmailError(emailInput, 'Este email já está cadastrado. Tente fazer login ou use um email diferente.');
+                return false;
+            } else {
+                // Se não há erro, procede com o cadastro
+                alert('Cadastro realizado com sucesso!');
+            }
+        });
+
+        // Event listener para verificar email em tempo real
+        document.getElementById('email').addEventListener('blur', function() {
+            const email = this.value;
+            if (email && verificarEmail(email)) {
+                showEmailError(this, 'Este email já está cadastrado. Tente fazer login ou use um email diferente.');
+            } else {
+                hideEmailError(this);
+            }
+        });
+    </script>
+</body>
+</html>
+

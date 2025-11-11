@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favoritos - Pratica+</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .favoritos-container {
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 20px;
+        }
+        
+        .main-layout {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            width: 100%;
+        }
+        
+        .user-profile-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00bcd4, #00acc1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #001018;
+            font-size: 32px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,188,212,0.3);
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1A2332;
+            margin-bottom: 8px;
+        }
+        
+        .profile-email {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .profile-categories {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .category-badge {
+            background: #ff6b35;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .profile-details {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-detail {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        .profile-detail strong {
+            color: #1A2332;
+        }
+        
+        .btn-edit-profile {
+            background: linear-gradient(135deg, #2E3F59, #1e2a3a);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-edit-profile:hover {
+            background: linear-gradient(135deg, #1e2a3a, #0f1a26);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(46,63,89,0.4);
+        }
+        
+        
+        .favoritos-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .favoritos-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1A2332;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .favoritos-count {
+            background: #ff6b35;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .favoritos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            justify-items: center;
+        }
+        
+        @media (min-width: 768px) {
+            .favoritos-grid {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 800px;
+                margin: 0 auto;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .favoritos-grid {
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 1000px;
+            }
+        }
+        
+        .favorito-card {
+            background: #fff;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .favorito-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: #00bcd4;
+            transform: translateY(-5px);
+        }
+        
+        .favorito-card-header {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .favorito-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .favorito-card:hover .favorito-image {
+            transform: scale(1.05);
+        }
+        
+        .favorito-name {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+        
+        .favorito-rating {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .favorito-rating:hover {
+            background: rgba(0,0,0,0.9);
+            transform: scale(1.1);
+        }
+        
+        .rating-star {
+            color: #ff6b35;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .favorito-remove-btn {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,107,53,0.9);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .favorito-remove-btn:hover {
+            background: #ff6b35;
+            transform: scale(1.1);
+        }
+        
+        .favorito-info {
+            padding: 20px;
+        }
+        
+        .favorito-description {
+            color: #7f8c8d;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .favorito-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .favorito-tag {
+            background: #e9ecef;
+            color: #495057;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .empty-favoritos {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+        }
+        
+        .empty-favoritos i {
+            font-size: 64px;
+            color: #dee2e6;
+            margin-bottom: 20px;
+        }
+        
+        .empty-favoritos h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+        
+        .empty-favoritos p {
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .btn-explore {
+            background: linear-gradient(135deg, #00bcd4, #00acc1);
+            color: #001018;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .btn-explore:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,188,212,0.3);
+        }
+        
+        /* Estilos para ícones de cadeado */
+        .lock-icon {
+            color: #ff6b35;
+            font-size: 12px;
+            margin-left: 8px;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        
+        .lock-icon.hidden {
+            display: none;
+        }
+        
+        .menu-list li a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+        
+        .menu-list li a .lock-icon {
+            margin-left: auto;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .main-layout {
+                padding: 0 15px;
+            }
+            
+            .favoritos-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="bar"><i class="fas fa-bars"></i></div>
+        <div class="menu-text">Menu</div>
+        <div class="title">Pratica <span class="plus">+</span></div>
+        <div class="badge">
+            <img src="imagens/logo.jpg" alt="Pratica +" class="logo-img">
+        </div>
+    </header>
+    
+    <div class="favoritos-container">
+        <div class="main-layout">
+            <!-- Conteúdo principal -->
+            <div class="main-content">
+                <!-- Seção do perfil do usuário -->
+                <div class="user-profile-section">
+                    <div class="profile-avatar" id="profileAvatar">U</div>
+                    <div class="profile-info">
+                        <h2 class="profile-name" id="profileName">Nome do Usuário</h2>
+                        <p class="profile-email" id="profileEmail">usuario@email.com</p>
+                        <div class="profile-categories" id="profileCategories">
+                            <!-- Categorias serão inseridas aqui via JavaScript -->
+                        </div>
+                        <div class="profile-details">
+                            <div class="profile-detail">
+                                <strong>Praticando desde:</strong> <span id="joinDate">00/00/0000</span>
+                            </div>
+                            <div class="profile-detail">
+                                <strong>Esporte favorito:</strong> <span id="favoriteSport">xxxxxxx</span>
+                            </div>
+                        </div>
+                        <button class="btn-edit-profile" onclick="window.location.href='cadastro.html?edit=true'">
+                            <i class="fas fa-edit"></i> Editar perfil
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Seção de favoritos -->
+                <div class="favoritos-section">
+                    <h2 class="favoritos-title">
+                        <i class="fas fa-heart"></i> Meus Favoritos
+                        <span class="favoritos-count" id="favoritosCount">0</span>
+                    </h2>
+                    <div class="favoritos-grid" id="favoritosGrid">
+                        <!-- Cards de esportes favoritos serão inseridos aqui via JavaScript -->
+                    </div>
+                    <div class="empty-favoritos" id="emptyFavoritos" style="display: none;">
+                        <i class="fas fa-heart-broken"></i>
+                        <h3>Nenhum esporte favorito ainda</h3>
+                        <p>Explore os esportes disponíveis e marque seus favoritos para vê-los aqui!</p>
+                        <a href="esportes.html" class="btn-explore">
+                            <i class="fas fa-search"></i> Explorar Esportes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-menu" id="closeMenu"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <!-- Seção do usuário logado -->
+        <div class="user-section" id="userSection" style="display: none;">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <span id="userInitial">U</span>
+                </div>
+                <div class="user-details">
+                    <div class="user-name" id="userName">Nome do Usuário</div>
+                    <div class="user-email" id="userEmail">usuario@email.com</div>
+                </div>
+            </div>
+            <div class="user-actions">
+                <button class="btn-logout" id="btnLogout">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
+        </div>
+        
+        <!-- Seção para usuário não logado -->
+        <div class="login-section" id="loginSection">
+            <div class="login-prompt">
+                <i class="fas fa-user-circle"></i>
+                <p>Faça login para personalizar sua experiência</p>
+            </div>
+        </div>
+        
+        <ul class="menu-list">
+            <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+            <li><a href="portal.html"><i class="fas fa-newspaper"></i> Portal</a></li>
+            <li><a href="#" id="sportsLink"><i class="fas fa-futbol"></i> Esportes <i class="fas fa-lock lock-icon" id="sportsLock"></i></a></li>
+            <li><a href="#" id="favoritosLink"><i class="fas fa-heart"></i> Favoritos <i class="fas fa-lock lock-icon" id="favoritosLock"></i></a></li>
+        </ul>
+    </aside>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    
+    <script src="script.js"></script>
+    <script>
+        // Garantir que o sidebar comece fechado
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.remove('active');
+            }
+        });
+        
+        // Verificar se usuário está logado
+        function checkLogin() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                alert('Você precisa fazer login para acessar esta página.');
+                window.location.href = 'login.html';
+                return null;
+            }
+            return JSON.parse(currentUser);
+        }
+        
+        // Carregar dados do usuário
+        function loadUserData() {
+            const user = checkLogin();
+            if (!user) return;
+            
+            console.log('👤 Carregando dados do usuário:', user);
+            
+            // Atualizar informações básicas do perfil
+            document.getElementById('profileName').textContent = user.nome || 'Usuário';
+            document.getElementById('profileEmail').textContent = user.email || 'usuario@email.com';
+            document.getElementById('profileAvatar').textContent = (user.nome || 'U').charAt(0).toUpperCase();
+            
+            // Tentar buscar dados completos do Firebase primeiro
+            if (typeof window.db !== 'undefined' && user.uid) {
+                console.log('🔍 Buscando dados no Firebase para UID:', user.uid);
+                
+                window.db.collection('users').doc(user.uid).get().then(userDoc => {
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        console.log('📊 Dados do Firebase:', userData);
+                        
+                        // Atualizar data de cadastro
+                        const joinDateElement = document.getElementById('joinDate');
+                        if (joinDateElement) {
+                            if (userData.dataCadastro) {
+                                try {
+                                    const joinDate = userData.dataCadastro.toDate();
+                                    const formattedDate = joinDate.toLocaleDateString('pt-BR');
+                                    joinDateElement.textContent = formattedDate;
+                                    console.log('✅ Data de cadastro atualizada:', formattedDate);
+                                } catch (dateError) {
+                                    console.error('Erro ao formatar data:', dateError);
+                                    joinDateElement.textContent = 'Data não disponível';
+                                }
+                            } else {
+                                joinDateElement.textContent = 'Data não disponível';
+                            }
+                        }
+                        
+                        // Atualizar esporte favorito
+                        const favoriteSportElement = document.getElementById('favoriteSport');
+                        if (favoriteSportElement) {
+                            const favoriteSport = userData.esporteFavorito || userData.preferencias?.esporteFavorito || 'Não definido';
+                            favoriteSportElement.textContent = favoriteSport;
+                            console.log('✅ Esporte favorito atualizado:', favoriteSport);
+                        }
+                        
+                        // Atualizar categorias
+                        const categoriesContainer = document.getElementById('profileCategories');
+                        if (categoriesContainer) {
+                            const categories = userData.preferencias?.esportesInteresse || [];
+                            console.log('🏷️ Categorias encontradas no Firebase:', categories);
+                            
+                            categoriesContainer.innerHTML = '';
+                            
+                            if (categories.length > 0) {
+                                categories.forEach(category => {
+                                    const badge = document.createElement('div');
+                                    badge.className = 'category-badge';
+                                    badge.textContent = category;
+                                    categoriesContainer.appendChild(badge);
+                                });
+                                console.log('✅ Categorias atualizadas:', categories.length);
+                            }
+                        }
+                        
+                        console.log('✅ Dados do usuário carregados do Firebase');
+                    } else {
+                        console.warn('⚠️ Usuário não encontrado no Firebase');
+                        setDefaultUserData();
+                    }
+                }).catch(error => {
+                    console.error('❌ Erro ao buscar dados do Firebase:', error);
+                    setDefaultUserData();
+                });
+            } else {
+                console.warn('⚠️ Firebase não disponível ou UID não encontrado');
+                setDefaultUserData();
+            }
+        }
+        
+        // Definir dados padrão do usuário
+        function setDefaultUserData() {
+            const joinDateElement = document.getElementById('joinDate');
+            const favoriteSportElement = document.getElementById('favoriteSport');
+            
+            if (joinDateElement) {
+                joinDateElement.textContent = 'Data não disponível';
+            }
+            if (favoriteSportElement) {
+                favoriteSportElement.textContent = 'Não definido';
+            }
+            
+            console.log('✅ Dados padrão definidos');
+        }
+        
+        // Carregar favoritos do usuário
+        function loadFavoritos() {
+            const user = checkLogin();
+            if (!user) return;
+            
+            const favoritos = JSON.parse(localStorage.getItem(`favoritos_${user.email}`) || '[]');
+            const favoritosGrid = document.getElementById('favoritosGrid');
+            const emptyFavoritos = document.getElementById('emptyFavoritos');
+            const favoritosCount = document.getElementById('favoritosCount');
+            
+            console.log('📋 Favoritos carregados:', favoritos);
+            
+            // Atualizar contador
+            favoritosCount.textContent = favoritos.length;
+            
+            if (favoritos.length === 0) {
+                favoritosGrid.style.display = 'none';
+                emptyFavoritos.style.display = 'block';
+            } else {
+                favoritosGrid.style.display = 'grid';
+                emptyFavoritos.style.display = 'none';
+                
+                // Limpar grid
+                favoritosGrid.innerHTML = '';
+                
+                // Criar cards dos favoritos
+                favoritos.forEach(esporte => {
+                    const favoritoCard = createFavoritoCard(esporte);
+                    favoritosGrid.appendChild(favoritoCard);
+                });
+            }
+        }
+        
+        // Criar card de favorito
+        function createFavoritoCard(esporte) {
+            console.log('🎨 Criando card para favorito:', esporte);
+            
+            // Gerar dados do esporte baseado no nome
+            const sportData = getSportDataByName(esporte.name);
+            
+            const card = document.createElement('div');
+            card.className = 'favorito-card';
+            
+            card.innerHTML = `
+                <div class="favorito-card-header">
+                    <img src="${sportData.image}" alt="${esporte.name}" class="favorito-image">
+                    <div class="favorito-name">${esporte.name}</div>
+                    <div class="favorito-rating">
+                        <i class="fas fa-star rating-star"></i>
+                    </div>
+                    <button class="favorito-remove-btn" onclick="removeFavorito('${esporte.name}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="favorito-info">
+                    <div class="favorito-description">${sportData.description}</div>
+                    <div class="favorito-tags">
+                        ${sportData.tags.map(tag => `<span class="favorito-tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // Obter dados do esporte baseado no nome
+        function getSportDataByName(sportName) {
+            const sportsDatabase = {
+                'Futebol': {
+                    image: 'https://media.istockphoto.com/id/1610631888/pt/foto/kid-playing-soccer-in-local-park.jpg?s=612x612&w=0&k=20&c=hT2N962BMbPHdt29-K-8OtCANoc-pN69vryfzfIKUBs=',
+                    description: 'O esporte mais popular do mundo, perfeito para trabalho em equipe e condicionamento físico.',
+                    tags: ['Esportes coletivos', 'Cardio', 'Popular']
+                },
+                'Basquete': {
+                    image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1000&h=600&fit=crop&crop=center',
+                    description: 'Esporte dinâmico que desenvolve agilidade, coordenação e espírito competitivo.',
+                    tags: ['Esportes coletivos', 'Agilidade', 'Competitivo']
+                },
+                'Vôlei': {
+                    image: 'https://static.todamateria.com.br/upload/12/00/1200pxeuropeidipallavolo2005italiarussia-cke.jpg',
+                    description: 'Esporte de rede que trabalha coordenação, reflexos e trabalho em equipe.',
+                    tags: ['Esportes coletivos', 'Reflexos', 'Rede']
+                },
+                'Handebol': {
+                    image: 'https://jpimg.com.br/uploads/2021/07/54deb54d665793d8efa376891feb6020ae0765faw-e1627262558204.jpg',
+                    description: 'Esporte com bola nas mãos que desenvolve força, agilidade e estratégia.',
+                    tags: ['Esportes coletivos', 'Força', 'Equipe']
+                },
+                'Tênis': {
+                    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR43NQuyhVaT9-3RFQVQeY3v-3U4O0NkYPyFA&s',
+                    description: 'Esporte de raquete individual que trabalha precisão, estratégia e resistência.',
+                    tags: ['Esportes individuais', 'Precisão', 'Estratégia']
+                },
+                'Atletismo': {
+                    image: 'https://blog.tremeterra.com.br/wp-content/uploads/2019/09/296782-modalidades-do-atletismo-conheca-as-principais-praticadas-no-brasil.jpg',
+                    description: 'Corrida, salto e arremesso que desenvolvem velocidade, força e resistência.',
+                    tags: ['Esportes individuais', 'Resistência', 'Velocidade']
+                },
+                'Natação': {
+                    image: 'https://images.unsplash.com/photo-1530549387789-4c1017266635?w=1000&h=600&fit=crop&crop=center',
+                    description: 'Esporte aquático completo que trabalha todo o corpo e sistema cardiovascular.',
+                    tags: ['Esportes individuais', 'Cardio', 'Aquático']
+                },
+                'Ciclismo': {
+                    image: 'https://www.canyon.com/dw/image/v2/BCML_PRD/on/demandware.static/-/Library-Sites-canyon-shared/default/dwc0e44f63/images/blog/Misc-Other/schlankmacher-fahrrad-02.jpg?sw=1064',
+                    description: 'Esporte sobre duas rodas que desenvolve resistência e coordenação.',
+                    tags: ['Esportes individuais', 'Resistência', 'Aventura']
+                },
+                'Musculação': {
+                    image: 'https://pratiquefitness.com.br/wp-content/uploads/2019/04/Rotina-musculacao-feminina-2.jpg',
+                    description: 'Treinamento com pesos que desenvolve força, resistência e massa muscular.',
+                    tags: ['Musculação', 'Força', 'Resistência']
+                },
+                'Boxe': {
+                    image: 'https://st3.depositphotos.com/6644020/17852/i/450/depositphotos_178522924-stock-photo-man-boxing-training-punching-bag.jpg',
+                    description: 'Arte marcial com punhos que desenvolve força, agilidade e autodefesa.',
+                    tags: ['Esportes de combate/luta', 'Força', 'Defesa']
+                },
+                'Jiu-Jitsu': {
+                    image: 'https://upload.wikimedia.org/wikipedia/commons/2/22/GABRIEL_VELLA_vs_ROMINHO_51.jpg',
+                    description: 'Arte marcial de solo que trabalha técnica, flexibilidade e estratégia.',
+                    tags: ['Esportes de combate/luta', 'Técnica', 'Solo']
+                },
+                'Kickboxing': {
+                    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxuaIyQZlFFcC7fJknHY-wYA79m4tMpLYPRA&s',
+                    description: 'Combate com chutes e socos que desenvolve agilidade e resistência.',
+                    tags: ['Esportes de combate/luta', 'Agilidade', 'Chutes']
+                },
+                'Muay Thai': {
+                    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Muay_Thai_Fight_Us_Vs_Burma_%2880668065%29.jpeg/250px-Muay_Thai_Fight_Us_Vs_Burma_%2880668065%29.jpeg',
+                    description: 'Arte marcial tailandesa que trabalha força, flexibilidade e disciplina.',
+                    tags: ['Esportes de combate/luta', 'Tradicional', 'Intenso']
+                },
+                'Fórmula 1': {
+                    image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=1000&h=600&fit=crop&crop=center',
+                    description: 'Corrida de carros de alta velocidade que exige precisão e reflexos rápidos.',
+                    tags: ['Esportes de velocidade/automobilismo', 'Velocidade', 'Tecnologia']
+                },
+                'MotoGP': {
+                    image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=1000&h=600&fit=crop&crop=center',
+                    description: 'Corrida de motos profissionais que desenvolve equilíbrio e coragem.',
+                    tags: ['Esportes de velocidade/automobilismo', 'Adrenalina', 'Precisão']
+                },
+                'Rally': {
+                    image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=1000&h=600&fit=crop&crop=center',
+                    description: 'Corrida em diferentes terrenos que exige adaptação e estratégia.',
+                    tags: ['Esportes de velocidade/automobilismo', 'Aventura', 'Terra']
+                },
+                'Surf': {
+                    image: 'https://media.cnn.com/api/v1/images/stellar/prod/130624174959-50-surf-spots-the-box.jpg?q=w_2365,h_1571,x_0,y_0,c_fill',
+                    description: 'Esporte nas ondas do mar que desenvolve equilíbrio e conexão com a natureza.',
+                    tags: ['Esportes aquáticos', 'Ondas', 'Equilíbrio']
+                },
+                'Vela': {
+                    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1000&h=600&fit=crop&crop=center',
+                    description: 'Navegação com vento que trabalha estratégia e trabalho em equipe.',
+                    tags: ['Esportes aquáticos', 'Vento', 'Estratégia']
+                },
+                'Remo': {
+                    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1000&h=600&fit=crop&crop=center',
+                    description: 'Esporte de remo em equipe que desenvolve força e sincronia.',
+                    tags: ['Esportes aquáticos', 'Força', 'Sincronia']
+                },
+                'Escalada': {
+                    image: 'https://www.innovasafety.com.br/wp-content/uploads/2024/10/escalada-esportiva.jpg',
+                    description: 'Subida em rochas e montanhas que desenvolve força, concentração e coragem.',
+                    tags: ['Esportes de aventura/natureza', 'Força', 'Concentração']
+                },
+                'Mountain Bike': {
+                    image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=1000&h=600&fit=crop&crop=center',
+                    description: 'Ciclismo em trilhas que trabalha resistência e conexão com a natureza.',
+                    tags: ['Esportes de aventura/natureza', 'Trilha', 'Aventura']
+                },
+                'Trekking': {
+                    image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=1000&h=600&fit=crop&crop=center',
+                    description: 'Caminhada em trilhas que desenvolve resistência e apreciação da natureza.',
+                    tags: ['Esportes de aventura/natureza', 'Caminhada', 'Natureza']
+                },
+                'Skate': {
+                    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy46-TCO1pPW10lP0v6du0Fh9Iwem1cl8UOg&s',
+                    description: 'Esporte urbano que desenvolve equilíbrio, coordenação e criatividade.',
+                    tags: ['Esportes de velocidade', 'Equilíbrio', 'Criatividade']
+                },
+                'Yoga': {
+                    image: 'https://image.tuasaude.com/media/article/xl/du/beneficios-do-yoga_22472.jpg?width=686&height=487',
+                    description: 'Prática milenar que desenvolve flexibilidade, equilíbrio e bem-estar mental.',
+                    tags: ['Mindfulness', 'Flexibilidade', 'Bem-estar']
+                },
+                'Pilates': {
+                    image: 'https://pilatesvilamada.com.br/wp-content/uploads/2021/11/pilates-e-funcional-1.jpg',
+                    description: 'Método de exercício que desenvolve força, flexibilidade e consciência corporal.',
+                    tags: ['Força', 'Flexibilidade', 'Consciência corporal']
+                },
+                'Crossfit': {
+                    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZVmdOm-wtKMSmbj6dB6m950hKl7DmA_N3_w&s',
+                    description: 'Treinamento funcional de alta intensidade que desenvolve força, resistência e agilidade.',
+                    tags: ['Alta intensidade', 'Força', 'Resistência']
+                },
+                'Ginástica': {
+                    image: 'https://s4.static.brasilescola.uol.com.br/be/2022/09/rebeca-andrade-olimpiadas.jpg',
+                    description: 'Esporte olímpico que desenvolve força, flexibilidade, coordenação e elegância.',
+                    tags: ['Olímpico', 'Flexibilidade', 'Coordenação']
+                },
+                'Karatê': {
+                    image: 'https://images.unsplash.com/photo-1549719386-74dfcbf167db?w=1000&h=600&fit=crop&crop=center',
+                    description: 'Arte marcial japonesa que desenvolve disciplina, força e coordenação.',
+                    tags: ['Esportes de combate/luta', 'Disciplina', 'Coordenação']
+                }
+            };
+            
+            return sportsDatabase[sportName] || {
+                image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1000&h=600&fit=crop&crop=center',
+                description: 'Esporte favorito selecionado pelo usuário.',
+                tags: ['Esporte', 'Favorito']
+            };
+        }
+        
+        
+        // Remover favorito
+        function removeFavorito(esporteName) {
+            const user = checkLogin();
+            if (!user) return;
+            
+            if (confirm(`Tem certeza que deseja remover "${esporteName}" dos favoritos?`)) {
+                const favoritos = JSON.parse(localStorage.getItem(`favoritos_${user.email}`) || '[]');
+                const updatedFavoritos = favoritos.filter(esporte => esporte.name !== esporteName);
+                localStorage.setItem(`favoritos_${user.email}`, JSON.stringify(updatedFavoritos));
+                
+                // Recarregar favoritos
+                loadFavoritos();
+                
+                console.log(`✅ ${esporteName} removido dos favoritos`);
+            }
+        }
+        
+        // Sistema de banco de dados (mesmo do cadastro)
+        class Database {
+            constructor() {
+                this.dbName = 'pratica_plus_users';
+            }
+            
+            getAllUsers() {
+                return JSON.parse(localStorage.getItem(this.dbName) || '[]');
+            }
+            
+            getUserByEmail(email) {
+                const users = this.getAllUsers();
+                return users.find(user => user.email === email);
+            }
+        }
+        
+        // Aguardar Firebase carregar
+        function waitForFirebase() {
+            return new Promise((resolve) => {
+                if (typeof window.db !== 'undefined' && typeof window.auth !== 'undefined') {
+                    resolve();
+                } else {
+                    const checkFirebase = setInterval(() => {
+                        if (typeof window.db !== 'undefined' && typeof window.auth !== 'undefined') {
+                            clearInterval(checkFirebase);
+                            resolve();
+                        }
+                    }, 100);
+                }
+            });
+        }
+        
+        // Carregar dados quando a página carregar
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('🔄 Iniciando carregamento da página de favoritos...');
+            
+            // Aguardar Firebase carregar
+            await waitForFirebase();
+            console.log('✅ Firebase carregado');
+            
+            // Carregar dados do usuário e favoritos
+            loadUserData();
+            loadFavoritos();
+            setupSidebar();
+            updateLockIcons();
+        });
+        
+        // Configurar sidebar específico da página
+        function setupSidebar() {
+            // Gerenciar usuário no sidebar
+            updateUserSection();
+            
+            // Botão de logout
+            const btnLogout = document.getElementById('btnLogout');
+            if (btnLogout) {
+                btnLogout.addEventListener('click', function() {
+                    if (confirm('Tem certeza que deseja sair?')) {
+                        sessionStorage.removeItem('currentUser');
+                        updateUserSection();
+                        alert('Logout realizado com sucesso!');
+                    }
+                });
+            }
+            
+            // Event listeners para links do menu
+            const sportsLink = document.getElementById('sportsLink');
+            if (sportsLink) {
+                sportsLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (checkLogin()) {
+                        window.location.href = 'esportes.html';
+                    }
+                });
+            }
+            
+            const favoritosLink = document.getElementById('favoritosLink');
+            if (favoritosLink) {
+                favoritosLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (checkLogin()) {
+                        window.location.href = 'favoritos.html';
+                    }
+                });
+            }
+        }
+        
+        // Gerenciar usuário no sidebar
+        function updateUserSection() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            const userSection = document.getElementById('userSection');
+            const loginSection = document.getElementById('loginSection');
+            
+            if (currentUser) {
+                try {
+                    const user = JSON.parse(currentUser);
+                    
+                    // Mostrar seção do usuário
+                    userSection.style.display = 'block';
+                    loginSection.style.display = 'none';
+                    
+                    // Atualizar informações do usuário
+                    document.getElementById('userName').textContent = user.nome;
+                    document.getElementById('userEmail').textContent = user.email;
+                    
+                    // Atualizar avatar com primeira letra do nome
+                    const userInitial = document.getElementById('userInitial');
+                    userInitial.textContent = user.nome.charAt(0).toUpperCase();
+                    
+                } catch (error) {
+                    console.error('Erro ao carregar dados do usuário:', error);
+                    showLoginSection();
+                }
+            } else {
+                showLoginSection();
+            }
+        }
+        
+        function showLoginSection() {
+            const userSection = document.getElementById('userSection');
+            const loginSection = document.getElementById('loginSection');
+            
+            userSection.style.display = 'none';
+            loginSection.style.display = 'block';
+        }
+        
+        // Função para testar favoritos
+        function testFavoritos() {
+            console.log('🧪 Testando página de favoritos...');
+            const user = checkLogin();
+            if (!user) {
+                console.log('❌ Usuário não logado');
+                return;
+            }
+            
+            const favoritos = JSON.parse(localStorage.getItem(`favoritos_${user.email}`) || '[]');
+            console.log('👤 Usuário:', user.nome);
+            console.log('📧 Email:', user.email);
+            console.log('⭐ Favoritos encontrados:', favoritos.length);
+            console.log('📋 Lista de favoritos:', favoritos);
+            
+            // Testar criação de cards
+            if (favoritos.length > 0) {
+                console.log('🎨 Testando criação de card para:', favoritos[0].name);
+                const testCard = createFavoritoCard(favoritos[0]);
+                console.log('✅ Card criado:', testCard);
+            }
+        }
+        
+        // Função para testar dados do usuário
+        function testUserData() {
+            console.log('🧪 Testando dados do usuário...');
+            const user = checkLogin();
+            if (!user) {
+                console.log('❌ Usuário não logado');
+                return;
+            }
+            
+            console.log('👤 Usuário do sessionStorage:', user);
+            console.log('🔧 Firebase disponível:', typeof window.db !== 'undefined');
+            console.log('🔧 Auth disponível:', typeof window.auth !== 'undefined');
+            
+            // Testar elementos da página
+            const elements = [
+                'profileName',
+                'profileEmail', 
+                'profileAvatar',
+                'joinDate',
+                'favoriteSport',
+                'profileCategories'
+            ];
+            
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                console.log(`- ${id}:`, element ? '✅ Encontrado' : '❌ Não encontrado');
+                if (element) {
+                    console.log(`  Conteúdo atual: "${element.textContent}"`);
+                }
+            });
+        }
+        
+        // Função para gerenciar ícones de cadeado
+        function updateLockIcons() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            const sportsLock = document.getElementById('sportsLock');
+            const favoritosLock = document.getElementById('favoritosLock');
+            
+            if (currentUser) {
+                // Usuário logado - esconder cadeados
+                if (sportsLock) {
+                    sportsLock.classList.add('hidden');
+                }
+                if (favoritosLock) {
+                    favoritosLock.classList.add('hidden');
+                }
+                console.log('🔓 Cadeados removidos - usuário logado');
+            } else {
+                // Usuário não logado - mostrar cadeados
+                if (sportsLock) {
+                    sportsLock.classList.remove('hidden');
+                }
+                if (favoritosLock) {
+                    favoritosLock.classList.remove('hidden');
+                }
+                console.log('🔒 Cadeados exibidos - usuário não logado');
+            }
+        }
+        
+        // Expor funções globalmente
+        window.testFavoritos = testFavoritos;
+        window.testUserData = testUserData;
+        window.removeFavorito = removeFavorito;
+        window.updateLockIcons = updateLockIcons;
+    </script>
+</body>
+</html>

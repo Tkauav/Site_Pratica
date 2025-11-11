@@ -1,0 +1,3063 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esportes - Pratica+</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .esportes-container {
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 20px;
+        }
+        
+        .main-layout {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+            align-items: start;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .sidebar-filters {
+            position: sticky;
+            top: 92px; /* Altura do header (72px) + margem (20px) */
+            align-self: start;
+            z-index: 10;
+            max-height: calc(100vh - 112px); /* Altura da viewport menos header e margem */
+            overflow-y: auto;
+        }
+        
+        .user-profile-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00bcd4, #00acc1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #001018;
+            font-size: 32px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,188,212,0.3);
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1A2332;
+            margin-bottom: 8px;
+        }
+        
+        .profile-email {
+            font-size: 16px;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .profile-categories {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .category-badge {
+            background: #ff6b35;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .profile-details {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-detail {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .profile-detail strong {
+            color: #1A2332;
+        }
+        
+        .btn-edit-profile {
+            background: linear-gradient(135deg, #2E3F59, #1e2a3a);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-edit-profile:hover {
+            background: linear-gradient(135deg, #1e2a3a, #0f1a26);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(46,63,89,0.4);
+        }
+        
+        .suggestions-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .suggestions-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1A2332;
+            margin-bottom: 30px;
+        }
+        
+        .sports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        @media (min-width: 1200px) {
+            .sports-grid {
+                grid-template-columns: repeat(3, 1fr); /* Fixed 3 columns for large screens */
+            }
+        }
+        
+        .sport-card {
+            background: #fff;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .sport-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: #00bcd4;
+        }
+        
+        .sport-card-header {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .sport-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .sport-name {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .sport-rating {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(0,0,0,0.7);
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .sport-rating:hover {
+            background: rgba(0,0,0,0.9);
+            transform: scale(1.1);
+        }
+        
+        .rating-star {
+            color: #ffeb3b;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .rating-star.favorited {
+            color: #ff6b35;
+            transform: scale(1.2);
+        }
+        
+        .sport-expand-btn {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0,0,0,0.7);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sport-expand-btn:hover {
+            background: #00bcd4;
+            transform: scale(1.1);
+        }
+        
+        .sport-expand-btn.expanded {
+            background: #ff6b35;
+            transform: rotate(45deg);
+        }
+        
+        .sport-expand-btn.expanded:hover {
+            background: #e55a2b;
+        }
+        
+        .sport-details {
+            display: none;
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .sport-details.expanded {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 200px;
+            }
+        }
+        
+        .sport-details h4 {
+            color: #1A2332;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sport-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .detail-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .detail-value {
+            font-size: 14px;
+            color: #1A2332;
+            font-weight: 500;
+        }
+        
+        .sport-benefits {
+            margin-top: 15px;
+        }
+        
+        .benefits-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1A2332;
+            margin-bottom: 8px;
+        }
+        
+        .benefits-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .benefit-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .sport-info {
+            padding: 20px;
+        }
+        
+        .sport-description {
+            color: #7f8c8d;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .sport-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .sport-tag {
+            background: #e9ecef;
+            color: #495057;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        
+        /* Filtros e Busca */
+        .filters-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .filters-header {
+            margin-bottom: 20px;
+        }
+        
+        .filters-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1A2332;
+            margin: 0;
+        }
+        
+        .search-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #00bcd4;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(0,188,212,0.1);
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+        
+        .filters-row {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .filter-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        .filter-select {
+            padding: 8px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: #00bcd4;
+            box-shadow: 0 0 0 2px rgba(0,188,212,0.1);
+        }
+        
+        .filter-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filter-tag {
+            background: #e9ecef;
+            color: #495057;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .filter-tag:hover {
+            background: #2E3F59;
+            color: #fff;
+        }
+        
+        .filter-tag.active {
+            background: #2E3F59;
+            color: #fff;
+            border-color: #1e2a3a;
+        }
+        
+        .clear-filters {
+            background: #6c757d;
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .clear-filters:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+        }
+        
+        .favorites-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .favorites-btn:hover {
+            background: #e55a2b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+        
+        .show-all-btn {
+            background: #00bcd4;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .show-all-btn:hover {
+            background: #00acc1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3);
+        }
+        
+        
+        .results-info {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .sidebar-filters {
+                position: static;
+                order: -1;
+            }
+            
+            .filters-section {
+                margin-bottom: 0;
+            }
+        }
+        
+        
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7f8c8d;
+        }
+        
+        .no-results i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #dee2e6;
+        }
+        
+        .no-results h3 {
+            margin: 0 0 10px 0;
+            color: #495057;
+        }
+        
+        .no-results p {
+            margin: 0;
+        }
+        
+        /* Estilos para cards de esportes */
+        .sports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .sport-card {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+        
+        .sport-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0,188,212,0.25);
+            border-color: #00bcd4;
+        }
+        
+        .sport-card.selected {
+            border-color: #00bcd4;
+            box-shadow: 0 8px 30px rgba(0,188,212,0.2);
+        }
+        
+        .sport-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .sport-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: brightness(0.9) contrast(1.1);
+        }
+        
+        .sport-card:hover .sport-image img {
+            transform: scale(1.1);
+            filter: brightness(1) contrast(1.2);
+        }
+        
+        .sport-label {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: linear-gradient(135deg, rgba(0,188,212,0.95), rgba(0,150,136,0.95));
+            color: white;
+            padding: 10px 16px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 4px 15px rgba(0,188,212,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .sport-favorite {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(255,255,255,0.95);
+            color: #ff6b35;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .sport-favorite:hover {
+            background: #ff6b35;
+            color: white;
+            transform: scale(1.15);
+            box-shadow: 0 6px 20px rgba(255,107,53,0.4);
+        }
+        
+        .sport-favorite.favorited {
+            background: #ff6b35;
+            color: white;
+        }
+        
+        .sport-favorite.favorited:hover {
+            background: #e55a2b;
+        }
+        
+        .sport-add-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #00bcd4, #00acc1);
+            border: 3px solid rgba(255,255,255,0.9);
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            box-shadow: 0 6px 20px rgba(0,188,212,0.4);
+            backdrop-filter: blur(10px);
+        }
+        
+        .sport-add-btn:hover {
+            background: linear-gradient(135deg, #00acc1, #0097a7);
+            transform: scale(1.15);
+            box-shadow: 0 8px 25px rgba(0,188,212,0.6);
+        }
+        
+        .sport-dropdown {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            min-width: 260px;
+            max-width: 300px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            pointer-events: none;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+        
+        .sport-add-btn:hover .sport-dropdown {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        
+        .sport-dropdown::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: white;
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            color: #495057;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid #f1f3f4;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        
+        .dropdown-item:hover {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            color: #00bcd4;
+            transform: translateX(4px);
+        }
+        
+        .dropdown-item i {
+            width: 18px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .dropdown-item:hover i {
+            color: #00bcd4;
+            transform: scale(1.1);
+        }
+        
+        .dropdown-item span {
+            flex: 1;
+            line-height: 1.4;
+        }
+        
+        .dropdown-header {
+            background: linear-gradient(135deg, #00bcd4, #00acc1);
+            color: white;
+            padding: 16px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Responsividade do dropdown */
+        @media (max-width: 768px) {
+            .sport-dropdown {
+                min-width: 200px;
+                max-width: 250px;
+                font-size: 13px;
+            }
+            
+            .dropdown-item {
+                padding: 12px 16px;
+                font-size: 13px;
+                gap: 10px;
+            }
+            
+            .dropdown-item i {
+                width: 16px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .sport-dropdown {
+                min-width: 180px;
+                max-width: 220px;
+            }
+            
+            .dropdown-item {
+                padding: 10px 14px;
+                font-size: 12px;
+            }
+        }
+        
+        .sport-content {
+            padding: 24px;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+        }
+        
+        .sport-description {
+            color: #495057;
+            font-size: 15px;
+            line-height: 1.7;
+            margin: 0 0 20px 0;
+            text-align: left;
+            font-weight: 400;
+        }
+        
+        .sport-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .sport-tag {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            color: #37474f;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid rgba(0,188,212,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .sport-tag:first-child {
+            background: linear-gradient(135deg, #00bcd4, #00acc1);
+            color: white;
+            border-color: #00acc1;
+            box-shadow: 0 2px 8px rgba(0,188,212,0.3);
+        }
+        
+        .sport-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,188,212,0.2);
+        }
+        
+        /* Modal de informações detalhadas do esporte */
+        .sport-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .sport-modal.show {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .sport-modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+        }
+        
+        .sport-modal.show .sport-modal-content {
+            transform: scale(1);
+        }
+        
+        .sport-modal-header {
+            background: linear-gradient(135deg, #00bcd4, #00acc1);
+            color: white;
+            padding: 30px;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+        }
+        
+        .sport-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sport-modal-close:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+        
+        .sport-modal-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .sport-modal-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        .sport-modal-body {
+            padding: 40px;
+        }
+        
+        .sport-modal-section {
+            margin-bottom: 40px;
+        }
+        
+        .sport-modal-section h3 {
+            color: #00bcd4;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sport-modal-section h3 i {
+            font-size: 18px;
+        }
+        
+        .sport-modal-description {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #495057;
+            margin-bottom: 20px;
+        }
+        
+        .sport-modal-locations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .location-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #00bcd4;
+            transition: all 0.3s ease;
+        }
+        
+        .location-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0,188,212,0.2);
+        }
+        
+        .location-name {
+            font-weight: 600;
+            color: #00bcd4;
+            margin-bottom: 5px;
+        }
+        
+        .location-address {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .sport-modal-basics {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(0,188,212,0.2);
+        }
+        
+        .basic-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .basic-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .basic-icon {
+            background: linear-gradient(135deg, #00bcd4, #00acc1);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .basic-content h4 {
+            margin: 0 0 8px 0;
+            color: #00bcd4;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .basic-content p {
+            margin: 0;
+            color: #495057;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .sport-modal-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .sport-modal-tag {
+            background: linear-gradient(135deg, #00bcd4, #00acc1);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Estilos para ícones de cadeado */
+        .lock-icon {
+            color: #ff6b35;
+            font-size: 12px;
+            margin-left: 8px;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        
+        .lock-icon.hidden {
+            display: none;
+        }
+        
+        .menu-list li a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+        
+        .menu-list li a .lock-icon {
+            margin-left: auto;
+        }
+        
+        /* Estilos para o sistema de filtros */
+        .filters-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        
+        .filters-header {
+            margin-bottom: 20px;
+        }
+        
+        .filters-title {
+            color: #2c3e50;
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 0 20px 0;
+        }
+        
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 45px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #00bcd4;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(0,188,212,0.1);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 16px;
+        }
+        
+        .filters-row {
+            display: flex;
+            gap: 15px;
+            align-items: end;
+            margin-bottom: 20px;
+        }
+        
+        .filter-group {
+            flex: 1;
+        }
+        
+        .filter-label {
+            display: block;
+            color: #495057;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .filter-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 14px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: #00bcd4;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(0,188,212,0.1);
+        }
+        
+        .clear-filters {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .clear-filters:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .results-info {
+            background: #e3f2fd;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border-left: 4px solid #00bcd4;
+        }
+        
+        .results-info p {
+            margin: 0;
+            color: #495057;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .sport-modal {
+                padding: 10px;
+            }
+            
+            .sport-modal-content {
+                max-height: 95vh;
+            }
+            
+            .sport-modal-header {
+                padding: 20px;
+            }
+            
+            .sport-modal-body {
+                padding: 20px;
+            }
+            
+            .sport-modal-title {
+                font-size: 24px;
+            }
+            
+            .sport-modal-locations {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .filters-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-container {
+                max-width: none;
+            }
+            
+            .filters-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .filter-select {
+                min-width: auto;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="bar"><i class="fas fa-bars"></i></div>
+        <div class="menu-text">Menu</div>
+        <div class="title">Pratica <span class="plus">+</span></div>
+        <div class="badge">
+            <img src="imagens/logo.jpg" alt="Pratica +" class="logo-img">
+        </div>
+    </header>
+    
+    <div class="esportes-container">
+        <div class="main-layout">
+            <!-- Conteúdo principal -->
+            <div class="main-content">
+                <!-- Seção do perfil do usuário -->
+        <div class="user-profile-section">
+            <div class="profile-avatar" id="profileAvatar">
+                U
+            </div>
+            <div class="profile-info">
+                <div class="profile-name" id="profileName">Nome do Usuário</div>
+                <div class="profile-email" id="profileEmail">usuario@email.com</div>
+                <div class="profile-categories" id="profileCategories">
+                    <!-- Categorias serão inseridas aqui via JavaScript -->
+                </div>
+                <div class="profile-details">
+                    <div class="profile-detail">
+                        <strong>Praticando desde:</strong> <span id="joinDate">00/00/0000</span>
+                    </div>
+                    <div class="profile-detail">
+                        <strong>Esporte favorito:</strong> <span id="favoriteSport">xxxxxxx</span>
+                    </div>
+                </div>
+                <button class="btn-edit-profile" onclick="window.location.href='cadastro.html?edit=true'">
+                    <i class="fas fa-edit"></i> Editar perfil
+                </button>
+            </div>
+        </div>
+        
+        <!-- Seção de sugestões de esportes -->
+        <div class="suggestions-section">
+            <h2 class="suggestions-title">Baseado em suas escolhas</h2>
+            <div class="sports-grid" id="sportsGrid">
+                <!-- Cards de esportes serão inseridos aqui via JavaScript -->
+            </div>
+            <div class="no-results" id="noResults" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h3>Nenhum esporte encontrado</h3>
+                <p>Tente ajustar os filtros ou fazer uma nova busca.</p>
+            </div>
+        </div>
+            </div>
+            
+            <!-- Sidebar com filtros -->
+            <div class="sidebar-filters">
+                <!-- Seção de filtros e busca -->
+                <div class="filters-section">
+                    <div class="filters-header">
+                        <h3 class="filters-title">Filtros e Busca</h3>
+                    </div>
+                    
+                    <div class="search-container">
+                        <input type="text" class="search-input" id="searchInput" placeholder="Buscar esportes...">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                    
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label class="filter-label" for="scopeFilter">Escopo</label>
+                            <select class="filter-select" id="scopeFilter">
+                                <option value="personalized">Personalizado (suas categorias)</option>
+                                <option value="all">Todos os esportes</option>
+                            </select>
+                        </div>
+                        
+                        <button class="clear-filters" id="clearFilters">
+                            <i class="fas fa-times"></i> Limpar
+                        </button>
+                    </div>
+                    
+                    <div class="filter-tags" id="filterTags">
+                        <!-- Tags de filtros ativos serão inseridas aqui -->
+                    </div>
+                    
+                    <div class="results-info" id="resultsInfo">
+                        <!-- Informações dos resultados serão inseridas aqui -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-menu" id="closeMenu"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <!-- Seção do usuário logado -->
+        <div class="user-section" id="userSection" style="display: none;">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <span id="userInitial">U</span>
+                </div>
+                <div class="user-details">
+                    <div class="user-name" id="userName">Nome do Usuário</div>
+                    <div class="user-email" id="userEmail">usuario@email.com</div>
+                </div>
+            </div>
+            <div class="user-actions">
+                <button class="btn-logout" id="btnLogout">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
+        </div>
+        
+        <!-- Seção para usuário não logado -->
+        <div class="login-section" id="loginSection">
+            <div class="login-prompt">
+                <i class="fas fa-user-circle"></i>
+                <p>Faça login para personalizar sua experiência</p>
+            </div>
+        </div>
+        
+        <ul class="menu-list">
+            <li><a href="index.html"><i class="fas fa-home"></i> Início</a></li>
+            <li><a href="portal.html"><i class="fas fa-newspaper"></i> Portal</a></li>
+            <li><a href="#" id="sportsLink"><i class="fas fa-futbol"></i> Esportes <i class="fas fa-lock lock-icon" id="sportsLock"></i></a></li>
+            <li><a href="#" id="favoritosLink"><i class="fas fa-heart"></i> Favoritos <i class="fas fa-lock lock-icon" id="favoritosLock"></i></a></li>
+        </ul>
+    </aside>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Carregar dados do usuário
+        async function loadUserProfile() {
+            console.log('🔄 Iniciando carregamento do perfil...');
+            
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                console.log('❌ Usuário não logado, redirecionando...');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            try {
+                const user = JSON.parse(currentUser);
+                console.log('👤 Usuário do sessionStorage:', user);
+                
+                // Atualizar informações básicas imediatamente
+                const nameElement = document.getElementById('profileName');
+                const emailElement = document.getElementById('profileEmail');
+                const avatarElement = document.getElementById('profileAvatar');
+                
+                if (nameElement) {
+                    nameElement.textContent = user.nome || 'Usuário';
+                    console.log('✅ Nome atualizado:', user.nome);
+                }
+                
+                if (emailElement) {
+                    emailElement.textContent = user.email || 'usuario@email.com';
+                    console.log('✅ Email atualizado:', user.email);
+                }
+                
+                if (avatarElement) {
+                    avatarElement.textContent = (user.nome || 'U').charAt(0).toUpperCase();
+                    console.log('✅ Avatar atualizado:', (user.nome || 'U').charAt(0).toUpperCase());
+                }
+                
+                // Buscar dados completos do Firebase
+                if (typeof window.db !== 'undefined' && user.uid) {
+                    console.log('🔍 Buscando dados no Firebase para UID:', user.uid);
+                    
+                    try {
+                        const userDoc = await window.db.collection('users').doc(user.uid).get();
+                        console.log('📄 Documento do Firebase:', userDoc);
+                        
+                        if (userDoc.exists) {
+                            const userData = userDoc.data();
+                            console.log('📊 Dados do Firebase:', userData);
+                            
+                            // Atualizar data de cadastro
+                            const joinDateElement = document.getElementById('joinDate');
+                            if (joinDateElement) {
+                                if (userData.dataCadastro) {
+                                    try {
+                                        const joinDate = userData.dataCadastro.toDate();
+                                        const formattedDate = joinDate.toLocaleDateString('pt-BR');
+                                        joinDateElement.textContent = formattedDate;
+                                        console.log('✅ Data de cadastro atualizada:', formattedDate);
+                                    } catch (dateError) {
+                                        console.error('Erro ao formatar data:', dateError);
+                                        joinDateElement.textContent = 'Data não disponível';
+                                    }
+                                } else {
+                                    joinDateElement.textContent = 'Data não disponível';
+                                    console.log('⚠️ Data de cadastro não encontrada');
+                                }
+                            }
+                            
+                            // Atualizar esporte favorito
+                            const favoriteSportElement = document.getElementById('favoriteSport');
+                            if (favoriteSportElement) {
+                                const favoriteSport = userData.esporteFavorito || userData.preferencias?.esporteFavorito || 'Não definido';
+                                favoriteSportElement.textContent = favoriteSport;
+                                console.log('✅ Esporte favorito atualizado:', favoriteSport);
+                            }
+                            
+                            // Atualizar categorias
+                            const categoriesContainer = document.getElementById('profileCategories');
+                            if (categoriesContainer) {
+                                const categories = userData.preferencias?.esportesInteresse || [];
+                                console.log('🏷️ Categorias encontradas no Firebase:', categories);
+                                console.log('📊 Estrutura completa do userData:', userData);
+                                
+                                categoriesContainer.innerHTML = '';
+                                
+                                if (categories.length > 0) {
+                                    categories.forEach(category => {
+                                        const badge = document.createElement('div');
+                                        badge.className = 'category-badge';
+                                        badge.textContent = category;
+                                        categoriesContainer.appendChild(badge);
+                                    });
+                                    console.log('✅ Categorias atualizadas:', categories.length);
+                                    
+                                    // Carregar esportes baseados nas categorias
+                                    console.log('🔄 Chamando loadSportsBasedOnCategories com:', categories);
+                                    loadSportsBasedOnCategories(categories);
+                                } else {
+                                    console.log('⚠️ Nenhuma categoria encontrada, carregando todos os esportes');
+                                    console.log('📊 userData.preferencias:', userData.preferencias);
+                                    loadAllSports();
+                                }
+                            } else {
+                                console.error('❌ Elemento profileCategories não encontrado');
+                            }
+                            
+                            console.log('✅ Perfil carregado com sucesso do Firebase');
+                        } else {
+                            console.warn('⚠️ Usuário não encontrado no Firebase');
+                            
+                            // Definir valores padrão se não encontrar no Firebase
+                            const joinDateElement = document.getElementById('joinDate');
+                            const favoriteSportElement = document.getElementById('favoriteSport');
+                            
+                            if (joinDateElement) {
+                                joinDateElement.textContent = 'Data não disponível';
+                            }
+                            if (favoriteSportElement) {
+                                favoriteSportElement.textContent = 'Não definido';
+                            }
+                        }
+                    } catch (firebaseError) {
+                        console.error('❌ Erro ao buscar dados do Firebase:', firebaseError);
+                    }
+                } else {
+                    console.warn('⚠️ Firebase não disponível ou UID não encontrado');
+                    console.log('Firebase disponível:', typeof window.db !== 'undefined');
+                    console.log('UID do usuário:', user.uid);
+                }
+                
+            } catch (error) {
+                console.error('❌ Erro ao carregar perfil:', error);
+            }
+        }
+        
+        // Função para testar elementos da interface
+        function testProfileElements() {
+            console.log('🧪 Testando elementos do perfil...');
+            
+            const elements = [
+                'profileName',
+                'profileEmail', 
+                'profileAvatar',
+                'joinDate',
+                'favoriteSport',
+                'profileCategories'
+            ];
+            
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                console.log(`- ${id}:`, element ? '✅ Encontrado' : '❌ Não encontrado');
+                if (element) {
+                    console.log(`  Conteúdo atual: "${element.textContent}"`);
+                }
+            });
+        }
+        
+        // Função para carregar esportes baseados nas categorias do usuário
+        function loadSportsBasedOnCategories(categories) {
+            console.log('🏃 Iniciando loadSportsBasedOnCategories...');
+            console.log('📋 Categorias recebidas:', categories);
+            console.log('📋 Tipo das categorias:', typeof categories);
+            console.log('📋 É array?', Array.isArray(categories));
+            
+            const sportsGrid = document.getElementById('sportsGrid');
+            const noResults = document.getElementById('noResults');
+            
+            console.log('🎯 Elementos encontrados:');
+            console.log('- sportsGrid:', sportsGrid);
+            console.log('- noResults:', noResults);
+            
+            if (!sportsGrid) {
+                console.error('❌ Elemento sportsGrid não encontrado');
+                return;
+            }
+            
+            // Limpar grid atual
+            sportsGrid.innerHTML = '';
+            console.log('🧹 Grid limpo');
+            
+            // Verificar se categories é um array válido
+            if (!Array.isArray(categories) || categories.length === 0) {
+                console.warn('⚠️ Categorias inválidas ou vazias, carregando todos os esportes');
+                loadAllSports();
+                return;
+            }
+            
+            // Mapear categorias para esportes
+            const sportsByCategory = {
+                'Esportes coletivos': [
+                    { name: 'Futebol', image: 'https://media.istockphoto.com/id/1610631888/pt/foto/kid-playing-soccer-in-local-park.jpg?s=612x612&w=0&k=20&c=hT2N962BMbPHdt29-K-8OtCANoc-pN69vryfzfIKUBs=', description: 'O esporte mais popular do mundo, perfeito para trabalho em equipe e condicionamento físico.' },
+                    { name: 'Basquete', image: 'https://picsum.photos/seed/basketball/400/250', description: 'Esporte dinâmico que desenvolve agilidade, coordenação e espírito competitivo.' },
+                    { name: 'Vôlei', image: 'https://static.todamateria.com.br/upload/12/00/1200pxeuropeidipallavolo2005italiarussia-cke.jpg', description: 'Esporte de rede que trabalha coordenação, reflexos e trabalho em equipe.' },
+                    { name: 'Handebol', image: 'https://jpimg.com.br/uploads/2021/07/54deb54d665793d8efa376891feb6020ae0765faw-e1627262558204.jpg', description: 'Esporte com bola nas mãos que desenvolve força, agilidade e estratégia.' }
+                ],
+                'Esportes individuais': [
+                    { name: 'Tênis', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR43NQuyhVaT9-3RFQVQeY3v-3U4O0NkYPyFA&s', description: 'Esporte de raquete individual que trabalha precisão, estratégia e resistência.' },
+                    { name: 'Atletismo', image: 'https://blog.tremeterra.com.br/wp-content/uploads/2019/09/296782-modalidades-do-atletismo-conheca-as-principais-praticadas-no-brasil.jpg', description: 'Corrida, salto e arremesso que desenvolvem velocidade, força e resistência.' },
+                    { name: 'Natação', image: 'https://picsum.photos/seed/swimming/400/250', description: 'Esporte aquático completo que trabalha todo o corpo e sistema cardiovascular.' },
+                    { name: 'Ciclismo', image: 'https://www.canyon.com/dw/image/v2/BCML_PRD/on/demandware.static/-/Library-Sites-canyon-shared/default/dwc0e44f63/images/blog/Misc-Other/schlankmacher-fahrrad-02.jpg?sw=1064', description: 'Esporte sobre duas rodas que desenvolve resistência e coordenação.' }
+                ],
+                'Esportes de combate/luta': [
+                    { name: 'Boxe', image: 'https://st3.depositphotos.com/6644020/17852/i/450/depositphotos_178522924-stock-photo-man-boxing-training-punching-bag.jpg', description: 'Arte marcial com punhos que desenvolve força, agilidade e autodefesa.' },
+                    { name: 'Jiu-Jitsu', image: 'https://upload.wikimedia.org/wikipedia/commons/2/22/GABRIEL_VELLA_vs_ROMINHO_51.jpg', description: 'Arte marcial de solo que trabalha técnica, flexibilidade e estratégia.' },
+                    { name: 'Kickboxing', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxuaIyQZlFFcC7fJknHY-wYA79m4tMpLYPRA&s', description: 'Combate com chutes e socos que desenvolve agilidade e resistência.' },
+                    { name: 'Muay Thai', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Muay_Thai_Fight_Us_Vs_Burma_%2880668065%29.jpeg/250px-Muay_Thai_Fight_Us_Vs_Burma_%2880668065%29.jpeg', description: 'Arte marcial tailandesa que trabalha força, flexibilidade e disciplina.' }
+                ],
+                'Esportes de velocidade/automobilismo': [
+                    { name: 'Fórmula 1', image: 'https://picsum.photos/seed/f1/400/250', description: 'Corrida de carros de alta velocidade que exige precisão e reflexos rápidos.' },
+                    { name: 'MotoGP', image: 'https://picsum.photos/seed/motogp/400/250', description: 'Corrida de motos profissionais que desenvolve equilíbrio e coragem.' },
+                    { name: 'Rally', image: 'https://picsum.photos/seed/rally/400/250', description: 'Corrida em diferentes terrenos que exige adaptação e estratégia.' }
+                ],
+                'Esportes aquáticos': [
+                    { name: 'Surf', image: 'https://media.cnn.com/api/v1/images/stellar/prod/130624174959-50-surf-spots-the-box.jpg?q=w_2365,h_1571,x_0,y_0,c_fill', description: 'Esporte nas ondas do mar que desenvolve equilíbrio e conexão com a natureza.' },
+                    { name: 'Vela', image: 'https://picsum.photos/seed/sailing/400/250', description: 'Navegação com vento que trabalha estratégia e trabalho em equipe.' },
+                    { name: 'Remo', image: 'https://picsum.photos/seed/rowing/400/250', description: 'Esporte de remo em equipe que desenvolve força e sincronia.' }
+                ],
+                'Esportes de aventura/natureza': [
+                    { name: 'Escalada', image: 'https://www.innovasafety.com.br/wp-content/uploads/2024/10/escalada-esportiva.jpg', description: 'Subida em rochas e montanhas que desenvolve força, concentração e coragem.' },
+                    { name: 'Mountain Bike', image: 'https://picsum.photos/seed/mtb/400/250', description: 'Ciclismo em trilhas que trabalha resistência e conexão com a natureza.' },
+                    { name: 'Trekking', image: 'https://picsum.photos/seed/trekking/400/250', description: 'Caminhada em trilhas que desenvolve resistência e apreciação da natureza.' }
+                ]
+            };
+            
+            // Coletar esportes das categorias selecionadas
+            const selectedSports = [];
+            console.log('🔍 Processando categorias...');
+            
+            categories.forEach((category, index) => {
+                console.log(`📝 Categoria ${index + 1}: "${category}"`);
+                console.log(`🔍 Existe no mapeamento?`, sportsByCategory.hasOwnProperty(category));
+                
+                if (sportsByCategory[category]) {
+                    const sports = sportsByCategory[category];
+                    console.log(`✅ Encontrados ${sports.length} esportes para "${category}"`);
+                    selectedSports.push(...sports);
+                } else {
+                    console.log(`❌ Categoria "${category}" não encontrada no mapeamento`);
+                }
+            });
+            
+            console.log('🎯 Total de esportes selecionados:', selectedSports.length);
+            console.log('📋 Lista de esportes:', selectedSports);
+            
+            if (selectedSports.length > 0) {
+                console.log('🎨 Criando cards de esportes...');
+                // Mostrar esportes
+                selectedSports.forEach((sport, index) => {
+                    console.log(`🏃 Criando card ${index + 1}: ${sport.name}`);
+                    const sportCard = createSportCard(sport);
+                    sportsGrid.appendChild(sportCard);
+                });
+                
+                if (noResults) {
+                    noResults.style.display = 'none';
+                }
+                console.log('✅ Esportes carregados com sucesso no grid');
+            } else {
+                console.log('⚠️ Nenhum esporte encontrado, mostrando mensagem');
+                showNoSportsMessage();
+            }
+        }
+        
+        // Função para criar card de esporte
+        function createSportCard(sport) {
+            console.log('🎨 Criando card para esporte:', sport);
+            console.log('🔧 Botão + será criado com classe: sport-add-btn');
+            
+            // Gerar tags baseadas na categoria
+            const tags = generateSportTags(sport);
+            
+            // Verificar se já está nos favoritos
+            const currentUser = sessionStorage.getItem('currentUser');
+            const isFavorited = currentUser ? isSportFavorited(sport.name, JSON.parse(currentUser).email) : false;
+            
+            // Mapear esportes para imagens específicas
+            const sportImages = {
+                'Futebol': 'https://media.istockphoto.com/id/1610631888/pt/foto/kid-playing-soccer-in-local-park.jpg?s=612x612&w=0&k=20&c=hT2N962BMbPHdt29-K-8OtCANoc-pN69vryfzfIKUBs=',
+                'Basquete': 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1000&h=600&fit=crop&crop=center',
+                'Tênis': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR43NQuyhVaT9-3RFQVQeY3v-3U4O0NkYPyFA&s',
+                'Vôlei': 'https://static.todamateria.com.br/upload/12/00/1200pxeuropeidipallavolo2005italiarussia-cke.jpg',
+                'Natação': 'https://images.unsplash.com/photo-1530549387789-4c1017266635?w=1000&h=600&fit=crop&crop=center',
+                'Corrida': 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=1000&h=600&fit=crop&crop=center',
+                'Ciclismo': 'https://www.canyon.com/dw/image/v2/BCML_PRD/on/demandware.static/-/Library-Sites-canyon-shared/default/dwc0e44f63/images/blog/Misc-Other/schlankmacher-fahrrad-02.jpg?sw=1064',
+                'Musculação': 'https://pratiquefitness.com.br/wp-content/uploads/2019/04/Rotina-musculacao-feminina-2.jpg',
+                'Handebol': 'https://jpimg.com.br/uploads/2021/07/54deb54d665793d8efa376891feb6020ae0765faw-e1627262558204.jpg',
+                'Atletismo': 'https://blog.tremeterra.com.br/wp-content/uploads/2019/09/296782-modalidades-do-atletismo-conheca-as-principais-praticadas-no-brasil.jpg',
+                'Boxe': 'https://st3.depositphotos.com/6644020/17852/i/450/depositphotos_178522924-stock-photo-man-boxing-training-punching-bag.jpg',
+                'Jiu-Jitsu': 'https://upload.wikimedia.org/wikipedia/commons/2/22/GABRIEL_VELLA_vs_ROMINHO_51.jpg',
+                'Kickboxing': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxuaIyQZlFFcC7fJknHY-wYA79m4tMpLYPRA&s',
+                'Muay Thai': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Muay_Thai_Fight_Us_Vs_Burma_%2880668065%29.jpeg/250px-Muay_Thai_Fight_Us_Vs_Burma_%2880668065%29.jpeg',
+                'Surf': 'https://media.cnn.com/api/v1/images/stellar/prod/130624174959-50-surf-spots-the-box.jpg?q=w_2365,h_1571,x_0,y_0,c_fill',
+                'Skate': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy46-TCO1pPW10lP0v6du0Fh9Iwem1cl8UOg&s',
+                'Escalada': 'https://www.innovasafety.com.br/wp-content/uploads/2024/10/escalada-esportiva.jpg',
+                'Yoga': 'https://image.tuasaude.com/media/article/xl/du/beneficios-do-yoga_22472.jpg?width=686&height=487',
+                'Pilates': 'https://pilatesvilamada.com.br/wp-content/uploads/2021/11/pilates-e-funcional-1.jpg',
+                'Crossfit': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZVmdOm-wtKMSmbj6dB6m950hKl7DmA_N3_w&s',
+                'Dança': 'https://images.unsplash.com/photo-1508700929628-666bc8bd84ea?w=1000&h=600&fit=crop&crop=center',
+                'Ginástica': 'https://s4.static.brasilescola.uol.com.br/be/2022/09/rebeca-andrade-olimpiadas.jpg'
+            };
+            
+            // Usar imagem específica do esporte ou fallback
+            const sportImage = sportImages[sport.name] || sport.image || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1000&h=600&fit=crop&crop=center';
+            
+            const card = document.createElement('div');
+            card.className = 'sport-card';
+            card.innerHTML = `
+                <div class="sport-image">
+                    <img src="${sportImage}" alt="${sport.name}" loading="lazy">
+                    <div class="sport-label">${sport.name}</div>
+                    <div class="sport-favorite ${isFavorited ? 'favorited' : ''}" onclick="toggleFavorite('${sport.name}')">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <button class="sport-add-btn" title="Ver informações detalhadas" onclick="showSportDetails('${sport.name}')">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="sport-content">
+                    <p class="sport-description">${sport.description}</p>
+                    <div class="sport-tags">
+                        ${tags.map(tag => `<span class="sport-tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Adicionar evento de clique para seleção (exceto nos botões)
+            card.addEventListener('click', function(e) {
+                if (!e.target.closest('.sport-favorite') && !e.target.closest('.sport-add-btn')) {
+                    card.classList.toggle('selected');
+                }
+            });
+            
+            console.log('✅ Card criado com sucesso');
+            return card;
+        }
+        
+        // Função para gerar tags baseadas no esporte
+        function generateSportTags(sport) {
+            const tagMap = {
+                'Futebol': ['Esportes coletivos', 'Cardio', 'Popular'],
+                'Basquete': ['Esportes coletivos', 'Agilidade', 'Competitivo'],
+                'Vôlei': ['Esportes coletivos', 'Reflexos', 'Rede'],
+                'Handebol': ['Esportes coletivos', 'Força', 'Equipe'],
+                'Tênis': ['Esportes individuais', 'Precisão', 'Estratégia'],
+                'Atletismo': ['Esportes individuais', 'Resistência', 'Velocidade'],
+                'Natação': ['Esportes individuais', 'Cardio', 'Aquático'],
+                'Ciclismo': ['Esportes individuais', 'Resistência', 'Aventura'],
+                'Boxe': ['Esportes de combate/luta', 'Força', 'Defesa'],
+                'Jiu-Jitsu': ['Esportes de combate/luta', 'Técnica', 'Solo'],
+                'Kickboxing': ['Esportes de combate/luta', 'Agilidade', 'Chutes'],
+                'Muay Thai': ['Esportes de combate/luta', 'Tradicional', 'Intenso'],
+                'Fórmula 1': ['Esportes de velocidade/automobilismo', 'Velocidade', 'Tecnologia'],
+                'MotoGP': ['Esportes de velocidade/automobilismo', 'Adrenalina', 'Precisão'],
+                'Rally': ['Esportes de velocidade/automobilismo', 'Aventura', 'Terra'],
+                'Surf': ['Esportes aquáticos', 'Ondas', 'Equilíbrio'],
+                'Vela': ['Esportes aquáticos', 'Vento', 'Estratégia'],
+                'Remo': ['Esportes aquáticos', 'Força', 'Sincronia'],
+                'Escalada': ['Esportes de aventura/natureza', 'Força', 'Concentração'],
+                'Mountain Bike': ['Esportes de aventura/natureza', 'Trilha', 'Aventura'],
+                'Trekking': ['Esportes de aventura/natureza', 'Caminhada', 'Natureza']
+            };
+            
+            return tagMap[sport.name] || ['Esporte', 'Atividade'];
+        }
+        
+        // Função para mostrar mensagem quando não há esportes
+        function showNoSportsMessage() {
+            const sportsGrid = document.getElementById('sportsGrid');
+            const noResults = document.getElementById('noResults');
+            
+            if (sportsGrid) {
+                sportsGrid.innerHTML = '';
+            }
+            
+            if (noResults) {
+                noResults.style.display = 'block';
+                noResults.innerHTML = `
+                    <i class="fas fa-info-circle"></i>
+                    <h3>Nenhum esporte encontrado</h3>
+                    <p>Selecione suas categorias de interesse no perfil para ver esportes recomendados.</p>
+                `;
+            }
+        }
+        
+        // Função para testar esportes com categorias de exemplo
+        function testSportsWithSampleCategories() {
+            console.log('🧪 Testando esportes com categorias de exemplo...');
+            const sampleCategories = ['Esportes coletivos', 'Esportes de combate/luta'];
+            loadSportsBasedOnCategories(sampleCategories);
+        }
+        
+        // Expor funções globalmente para debug
+        window.testProfileElements = testProfileElements;
+        window.loadUserProfile = loadUserProfile;
+        window.loadBasicProfile = loadBasicProfile;
+        window.waitForFirebase = waitForFirebase;
+        window.loadSportsBasedOnCategories = loadSportsBasedOnCategories;
+        window.testSportsWithSampleCategories = testSportsWithSampleCategories;
+        
+        // Função para aguardar Firebase estar disponível
+        async function waitForFirebase() {
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            while (attempts < maxAttempts) {
+                if (typeof window.db !== 'undefined' && typeof firebase !== 'undefined') {
+                    console.log('✅ Firebase carregado com sucesso!');
+                    return true;
+                }
+                
+                console.log(`⏳ Aguardando Firebase... (tentativa ${attempts + 1}/${maxAttempts})`);
+                await new Promise(resolve => setTimeout(resolve, 500));
+                attempts++;
+            }
+            
+            console.error('❌ Firebase não carregou após 5 segundos');
+            return false;
+        }
+        
+        // Garantir que o sidebar comece fechado
+        document.addEventListener('DOMContentLoaded', async function() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.remove('active');
+            }
+            
+            // Aguardar Firebase carregar
+            const firebaseReady = await waitForFirebase();
+            if (firebaseReady) {
+                console.log('🔄 Carregando perfil...');
+                loadUserProfile();
+            } else {
+                console.error('❌ Não foi possível carregar o Firebase');
+                // Carregar apenas dados básicos do sessionStorage
+                loadBasicProfile();
+            }
+        });
+        
+        // Função para carregar apenas dados básicos do sessionStorage
+        function loadBasicProfile() {
+            console.log('🔄 Carregando perfil básico do sessionStorage...');
+            
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                console.log('❌ Usuário não logado');
+                return;
+            }
+            
+            try {
+                const user = JSON.parse(currentUser);
+                console.log('👤 Usuário do sessionStorage:', user);
+                
+                // Atualizar informações básicas
+                const nameElement = document.getElementById('profileName');
+                const emailElement = document.getElementById('profileEmail');
+                const avatarElement = document.getElementById('profileAvatar');
+                
+                if (nameElement) {
+                    nameElement.textContent = user.nome || 'Usuário';
+                    console.log('✅ Nome atualizado:', user.nome);
+                }
+                
+                if (emailElement) {
+                    emailElement.textContent = user.email || 'usuario@email.com';
+                    console.log('✅ Email atualizado:', user.email);
+                }
+                
+                if (avatarElement) {
+                    avatarElement.textContent = (user.nome || 'U').charAt(0).toUpperCase();
+                    console.log('✅ Avatar atualizado:', (user.nome || 'U').charAt(0).toUpperCase());
+                }
+                
+                // Definir valores padrão para campos do Firebase
+                const joinDateElement = document.getElementById('joinDate');
+                const favoriteSportElement = document.getElementById('favoriteSport');
+                
+                if (joinDateElement) {
+                    joinDateElement.textContent = 'Data não disponível';
+                }
+                if (favoriteSportElement) {
+                    favoriteSportElement.textContent = 'Não definido';
+                }
+                
+                console.log('✅ Perfil básico carregado');
+                
+            } catch (error) {
+                console.error('❌ Erro ao carregar perfil básico:', error);
+            }
+        }
+        
+        // Verificar se usuário está logado
+        function checkLogin() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                alert('Você precisa fazer login para acessar esta página.');
+                window.location.href = 'login.html';
+                return null;
+            }
+            return JSON.parse(currentUser);
+        }
+        
+        // Carregar dados do usuário
+        function loadUserData() {
+            const user = checkLogin();
+            if (!user) return;
+            
+            // Buscar dados completos do usuário no banco de dados
+            const db = new Database();
+            const fullUserData = db.getUserByEmail(user.email);
+            
+            if (fullUserData) {
+                // Atualizar informações do perfil
+                document.getElementById('profileName').textContent = fullUserData.nome;
+                document.getElementById('profileEmail').textContent = fullUserData.email;
+                document.getElementById('profileAvatar').textContent = fullUserData.nome.charAt(0).toUpperCase();
+                
+                // Data de cadastro formatada
+                const joinDate = new Date(fullUserData.dataCadastro);
+                document.getElementById('joinDate').textContent = joinDate.toLocaleDateString('pt-BR');
+                
+                // Esporte favorito
+                document.getElementById('favoriteSport').textContent = fullUserData.esporteFavorito || 'Não informado';
+                
+                // Categorias selecionadas
+                const categoriesContainer = document.getElementById('profileCategories');
+                if (fullUserData.categorias && fullUserData.categorias.length > 0) {
+                    fullUserData.categorias.forEach(category => {
+                        const badge = document.createElement('div');
+                        badge.className = 'category-badge';
+                        badge.textContent = category.nome;
+                        categoriesContainer.appendChild(badge);
+                    });
+                }
+                
+                // Gerar sugestões baseadas nas categorias
+                generateSportSuggestions(fullUserData.categorias);
+            }
+        }
+        
+        // Banco de dados completo de esportes
+        const allSports = [
+            // Coletivos
+            { name: 'Futebol', image: 'https://media.istockphoto.com/id/1610631888/pt/foto/kid-playing-soccer-in-local-park.jpg?s=612x612&w=0&k=20&c=hT2N962BMbPHdt29-K-8OtCANoc-pN69vryfzfIKUBs=', description: 'O esporte mais popular do mundo, perfeito para trabalho em equipe e condicionamento físico.', tags: ['Esportes coletivos', 'Cardio', 'Popular'], category: 'coletivos', difficulty: 'iniciante', equipment: 'basico' },
+            { name: 'Basquete', image: 'https://picsum.photos/seed/basketball/400/300', description: 'Esporte dinâmico que desenvolve agilidade, coordenação e espírito competitivo.', tags: ['Esportes coletivos', 'Agilidade', 'Competitivo'], category: 'coletivos', difficulty: 'intermediario', equipment: 'basico' },
+            { name: 'Vôlei', image: 'https://static.todamateria.com.br/upload/12/00/1200pxeuropeidipallavolo2005italiarussia-cke.jpg', description: 'Esporte de rede que trabalha coordenação, reflexos e trabalho em equipe.', tags: ['Esportes coletivos', 'Reflexos', 'Rede'], category: 'coletivos', difficulty: 'intermediario', equipment: 'basico' },
+            { name: 'Handebol', image: 'https://jpimg.com.br/uploads/2021/07/54deb54d665793d8efa376891feb6020ae0765faw-e1627262558204.jpg', description: 'Esporte de quadra que desenvolve força, agilidade e trabalho em equipe.', tags: ['Esportes coletivos', 'Força', 'Agilidade'], category: 'coletivos', difficulty: 'intermediario', equipment: 'basico' },
+            
+            // Individuais
+            { name: 'Tênis', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR43NQuyhVaT9-3RFQVQeY3v-3U4O0NkYPyFA&s', description: 'Esporte de raquete que desenvolve coordenação, estratégia e resistência física.', tags: ['Esportes individuais', 'Estratégia', 'Coordenação'], category: 'individuais', difficulty: 'intermediario', equipment: 'especializado' },
+            { name: 'Atletismo', image: 'https://blog.tremeterra.com.br/wp-content/uploads/2019/09/296782-modalidades-do-atletismo-conheca-as-principais-praticadas-no-brasil.jpg', description: 'Esporte base que desenvolve velocidade, resistência e força muscular.', tags: ['Esportes individuais', 'Velocidade', 'Resistência'], category: 'individuais', difficulty: 'iniciante', equipment: 'basico' },
+            { name: 'Natação', image: 'https://picsum.photos/seed/swimming/400/300', description: 'Exercício completo que trabalha todo o corpo sem impacto nas articulações.', tags: ['Esportes individuais', 'Aquático', 'Completo'], category: 'individuais', difficulty: 'iniciante', equipment: 'basico' },
+            { name: 'Golfe', image: 'https://picsum.photos/seed/golf/400/300', description: 'Esporte de precisão que desenvolve concentração, estratégia e coordenação.', tags: ['Esportes individuais', 'Precisão', 'Estratégia'], category: 'individuais', difficulty: 'avancado', equipment: 'especializado' },
+            
+            // Combate
+            { name: 'Muay Thai', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Muay_Thai_Fight_Us_Vs_Burma_%2880668065%29.jpeg/250px-Muay_Thai_Fight_Us_Vs_Burma_%2880668065%29.jpeg', description: 'Arte marcial tailandesa que desenvolve força, agilidade e disciplina mental.', tags: ['Esportes de combate/luta', 'Disciplina', 'Força'], category: 'combate', difficulty: 'avancado', equipment: 'especializado' },
+            { name: 'Jiu-Jitsu', image: 'https://upload.wikimedia.org/wikipedia/commons/2/22/GABRIEL_VELLA_vs_ROMINHO_51.jpg', description: 'Arte marcial brasileira focada em técnicas de solo e finalizações.', tags: ['Esportes de combate/luta', 'Técnica', 'Solo'], category: 'combate', difficulty: 'intermediario', equipment: 'especializado' },
+            { name: 'Boxe', image: 'https://st3.depositphotos.com/6644020/17852/i/450/depositphotos_178522924-stock-photo-man-boxing-training-punching-bag.jpg', description: 'Esporte de combate que desenvolve reflexos, condicionamento e autoconfiança.', tags: ['Esportes de combate/luta', 'Reflexos', 'Condicionamento'], category: 'combate', difficulty: 'intermediario', equipment: 'especializado' },
+            { name: 'Karatê', image: 'https://picsum.photos/seed/karate/400/300', description: 'Arte marcial japonesa que desenvolve disciplina, força e coordenação.', tags: ['Esportes de combate/luta', 'Disciplina', 'Coordenação'], category: 'combate', difficulty: 'intermediario', equipment: 'especializado' },
+            
+            // Velocidade
+            { name: 'Ciclismo', image: 'https://www.canyon.com/dw/image/v2/BCML_PRD/on/demandware.static/-/Library-Sites-canyon-shared/default/dwc0e44f63/images/blog/Misc-Other/schlankmacher-fahrrad-02.jpg?sw=1064', description: 'Esporte de resistência que desenvolve pernas e sistema cardiovascular.', tags: ['Esportes de velocidade/automobilismo', 'Resistência', 'Cardio'], category: 'velocidade', difficulty: 'iniciante', equipment: 'especializado' },
+            { name: 'Corrida', image: 'https://picsum.photos/seed/running/400/300', description: 'Esporte acessível que melhora condicionamento e resistência física.', tags: ['Esportes de velocidade/automobilismo', 'Acessível', 'Cardio'], category: 'velocidade', difficulty: 'iniciante', equipment: 'nenhum' },
+            { name: 'Skate', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy46-TCO1pPW10lP0v6du0Fh9Iwem1cl8UOg&s', description: 'Esporte urbano que desenvolve equilíbrio, coordenação e criatividade.', tags: ['Esportes de velocidade/automobilismo', 'Equilíbrio', 'Criatividade'], category: 'velocidade', difficulty: 'intermediario', equipment: 'especializado' },
+            
+            // Aventura
+            { name: 'Escalada', image: 'https://www.innovasafety.com.br/wp-content/uploads/2024/10/escalada-esportiva.jpg', description: 'Esporte de aventura que desenvolve força, equilíbrio e superação de limites.', tags: ['Esportes de aventura/natureza', 'Força', 'Equilíbrio'], category: 'aventura', difficulty: 'avancado', equipment: 'especializado' },
+            { name: 'Surf', image: 'https://media.cnn.com/api/v1/images/stellar/prod/130624174959-50-surf-spots-the-box.jpg?q=w_2365,h_1571,x_0,y_0,c_fill', description: 'Esporte aquático que trabalha equilíbrio, força e conexão com a natureza.', tags: ['Esportes de aventura/natureza', 'Aquático', 'Equilíbrio'], category: 'aventura', difficulty: 'avancado', equipment: 'especializado' },
+            { name: 'Montanhismo', image: 'https://picsum.photos/seed/mountaineering/400/300', description: 'Esporte de aventura que desenvolve resistência, força e determinação.', tags: ['Esportes de aventura/natureza', 'Resistência', 'Força'], category: 'aventura', difficulty: 'avancado', equipment: 'especializado' },
+            
+            // Aquáticos
+            { name: 'Polo Aquático', image: 'https://picsum.photos/seed/waterpolo/400/300', description: 'Esporte aquático em equipe que combina natação, estratégia e trabalho em grupo.', tags: ['Esportes aquáticos', 'Equipe', 'Estratégia'], category: 'aquaticos', difficulty: 'avancado', equipment: 'especializado' },
+            { name: 'Natação Sincronizada', image: 'https://picsum.photos/seed/synchronized-swimming/400/300', description: 'Esporte aquático artístico que combina natação, dança e coordenação.', tags: ['Esportes aquáticos', 'Arte', 'Coordenação'], category: 'aquaticos', difficulty: 'avancado', equipment: 'especializado' },
+            { name: 'Remo', image: 'https://picsum.photos/seed/rowing/400/300', description: 'Esporte aquático que desenvolve força, resistência e coordenação em equipe.', tags: ['Esportes aquáticos', 'Força', 'Equipe'], category: 'aquaticos', difficulty: 'intermediario', equipment: 'especializado' }
+        ];
+        
+        // Filtros ativos (apenas busca e escopo)
+        let currentFilters = {
+            search: '',
+            scope: 'personalized'
+        };
+        
+        // Gerar sugestões de esportes baseadas nas categorias
+        function generateSportSuggestions(categories) {
+            let suggestedSports = [];
+            
+            // Verificar se deve mostrar todos os esportes ou apenas personalizados
+            if (currentFilters.scope === 'all') {
+                // Mostrar todos os esportes
+                suggestedSports = [...allSports];
+            } else {
+                // Mostrar esportes baseados nas categorias do usuário
+                if (categories && categories.length > 0) {
+                    categories.forEach(category => {
+                        const categorySports = allSports.filter(sport => sport.category === category.id);
+                        suggestedSports.push(...categorySports);
+                    });
+                }
+                
+                // Se não houver categorias, mostrar esportes populares
+                if (suggestedSports.length === 0) {
+                    suggestedSports = allSports.filter(sport => 
+                        ['Futebol', 'Basquete', 'Natação', 'Corrida'].includes(sport.name)
+                    );
+                }
+            }
+            
+            // Aplicar filtros atuais
+            const filteredSports = applyFilters(suggestedSports);
+            
+            // Renderizar esportes
+            renderSports(filteredSports);
+        }
+        
+        // Aplicar filtros aos esportes (apenas busca)
+        function applyFilters(sports) {
+            return sports.filter(sport => {
+                // Filtro de busca
+                if (currentFilters.search && !sport.name.toLowerCase().includes(currentFilters.search.toLowerCase()) && 
+                    !sport.description.toLowerCase().includes(currentFilters.search.toLowerCase()) &&
+                    !sport.tags.some(tag => tag.toLowerCase().includes(currentFilters.search.toLowerCase()))) {
+                    return false;
+                }
+                
+                return true;
+            });
+        }
+        
+        // Renderizar esportes na tela
+        function renderSports(sports) {
+            const sportsGrid = document.getElementById('sportsGrid');
+            const noResults = document.getElementById('noResults');
+            const resultsInfo = document.getElementById('resultsInfo');
+            
+            // Limpar grid
+            sportsGrid.innerHTML = '';
+            
+            if (sports.length === 0) {
+                noResults.style.display = 'block';
+                resultsInfo.innerHTML = '<i class="fas fa-info-circle"></i> Nenhum esporte encontrado com os filtros aplicados.';
+            } else {
+                noResults.style.display = 'none';
+                resultsInfo.innerHTML = `<i class="fas fa-info-circle"></i> Mostrando ${sports.length} esporte${sports.length !== 1 ? 's' : ''} encontrado${sports.length !== 1 ? 's' : ''}.`;
+                
+                // Criar cards dos esportes
+                sports.forEach(sport => {
+                    const sportCard = createSportCard(sport);
+                    sportsGrid.appendChild(sportCard);
+                });
+            }
+        }
+        
+        // Atualizar filtros ativos
+        function updateActiveFilters() {
+            const filterTags = document.getElementById('filterTags');
+            filterTags.innerHTML = '';
+            
+            Object.entries(currentFilters).forEach(([key, value]) => {
+                if (value) {
+                    const tag = document.createElement('span');
+                    tag.className = 'filter-tag active';
+                    tag.textContent = getFilterDisplayName(key, value);
+                    tag.onclick = () => clearFilter(key);
+                    filterTags.appendChild(tag);
+                }
+            });
+        }
+        
+        // Obter nome de exibição do filtro
+        function getFilterDisplayName(key, value) {
+            const names = {
+                search: `Busca: "${value}"`,
+                scope: value === 'all' ? 'Escopo: Todos os esportes' : 'Escopo: Personalizado'
+            };
+            return names[key] || value;
+        }
+        
+        // Limpar filtro específico
+        function clearFilter(key) {
+            if (key === 'scope') {
+                currentFilters[key] = 'personalized';
+            } else {
+                currentFilters[key] = '';
+            }
+            
+            // Atualizar interface
+            if (key === 'search') {
+                document.getElementById('searchInput').value = '';
+            } else {
+                document.getElementById(key + 'Filter').value = currentFilters[key];
+            }
+            
+            // Aplicar filtros e renderizar
+            const user = checkLogin();
+            if (user) {
+                const db = new Database();
+                const fullUserData = db.getUserByEmail(user.email);
+                if (fullUserData) {
+                    generateSportSuggestions(fullUserData.categorias);
+                }
+            } else {
+                const allSportsCopy = [...allSports];
+                const filteredSports = applyFilters(allSportsCopy);
+                renderSports(filteredSports);
+            }
+            
+            updateActiveFilters();
+        }
+        
+        // Limpar todos os filtros
+        function clearAllFilters() {
+            currentFilters = {
+                search: '',
+                scope: 'personalized'
+            };
+            
+            // Limpar interface
+            document.getElementById('searchInput').value = '';
+            document.getElementById('scopeFilter').value = 'personalized';
+            
+            // Recarregar sugestões originais
+            const user = checkLogin();
+            if (user) {
+                const db = new Database();
+                const fullUserData = db.getUserByEmail(user.email);
+                if (fullUserData) {
+                    generateSportSuggestions(fullUserData.categorias);
+                }
+            }
+            
+            updateActiveFilters();
+        }
+        
+        
+        
+        
+        // Verificar se esporte está nos favoritos
+        function isSportFavorited(sportName, userEmail) {
+            const favoritos = JSON.parse(localStorage.getItem(`favoritos_${userEmail}`) || '[]');
+            return favoritos.some(fav => fav.name === sportName);
+        }
+        
+        // Alternar favorito do esporte
+        function toggleFavorite(sportName) {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                return;
+            }
+            
+            const user = JSON.parse(currentUser);
+            const userEmail = user.email;
+            const favoritos = JSON.parse(localStorage.getItem(`favoritos_${userEmail}`) || '[]');
+            
+            const existingIndex = favoritos.findIndex(fav => fav.name === sportName);
+            
+            if (existingIndex > -1) {
+                // Remover dos favoritos
+                favoritos.splice(existingIndex, 1);
+                console.log('❌ Esporte removido dos favoritos:', sportName);
+            } else {
+                // Adicionar aos favoritos
+                const sportData = {
+                    name: sportName,
+                    dateAdded: new Date().toISOString()
+                };
+                favoritos.push(sportData);
+                console.log('✅ Esporte adicionado aos favoritos:', sportName);
+            }
+            
+            // Salvar no localStorage
+            localStorage.setItem(`favoritos_${userEmail}`, JSON.stringify(favoritos));
+            
+            // Atualizar visual do card
+            updateFavoriteVisual(sportName, existingIndex === -1);
+        }
+        
+        // Atualizar visual do favorito
+        function updateFavoriteVisual(sportName, isFavorited) {
+            const favoriteElement = document.querySelector(`[onclick="toggleFavorite('${sportName}')"]`);
+            if (favoriteElement) {
+                if (isFavorited) {
+                    favoriteElement.classList.add('favorited');
+                } else {
+                    favoriteElement.classList.remove('favorited');
+                }
+            }
+        }
+        
+        // Funções auxiliares para exibir informações
+        function getCategoryName(category) {
+            const categories = {
+                'coletivos': 'Esportes Coletivos',
+                'individuais': 'Esportes Individuais',
+                'combate': 'Esportes de Combate',
+                'velocidade': 'Esportes de Velocidade',
+                'aventura': 'Esportes de Aventura',
+                'aquaticos': 'Esportes Aquáticos'
+            };
+            return categories[category] || category;
+        }
+        
+        function getDifficultyName(difficulty) {
+            const difficulties = {
+                'iniciante': 'Iniciante',
+                'intermediario': 'Intermediário',
+                'avancado': 'Avançado'
+            };
+            return difficulties[difficulty] || difficulty;
+        }
+        
+        function getEquipmentName(equipment) {
+            const equipments = {
+                'nenhum': 'Nenhum',
+                'basico': 'Básico',
+                'especializado': 'Especializado'
+            };
+            return equipments[equipment] || equipment;
+        }
+        
+        function getSportBenefits(sport) {
+            const benefits = {
+                'Futebol': ['Condicionamento', 'Trabalho em equipe', 'Coordenação', 'Resistência'],
+                'Basquete': ['Agilidade', 'Reflexos', 'Força', 'Velocidade'],
+                'Vôlei': ['Coordenação', 'Reflexos', 'Trabalho em equipe', 'Flexibilidade'],
+                'Handebol': ['Força', 'Agilidade', 'Coordenação', 'Resistência'],
+                'Tênis': ['Coordenação', 'Estratégia', 'Resistência', 'Reflexos'],
+                'Atletismo': ['Velocidade', 'Resistência', 'Força', 'Disciplina'],
+                'Natação': ['Resistência', 'Força', 'Flexibilidade', 'Baixo impacto'],
+                'Golfe': ['Concentração', 'Estratégia', 'Coordenação', 'Paciência'],
+                'Muay Thai': ['Força', 'Agilidade', 'Disciplina', 'Autoconfiança'],
+                'Jiu-Jitsu': ['Técnica', 'Flexibilidade', 'Estratégia', 'Autodefesa'],
+                'Boxe': ['Reflexos', 'Condicionamento', 'Autoconfiança', 'Disciplina'],
+                'Karatê': ['Disciplina', 'Coordenação', 'Força', 'Concentração'],
+                'Ciclismo': ['Resistência', 'Força nas pernas', 'Cardio', 'Aventura'],
+                'Corrida': ['Resistência', 'Cardio', 'Disciplina', 'Acessível'],
+                'Skate': ['Equilíbrio', 'Coordenação', 'Criatividade', 'Liberdade'],
+                'Escalada': ['Força', 'Equilíbrio', 'Superação', 'Concentração'],
+                'Surf': ['Equilíbrio', 'Força', 'Conexão com natureza', 'Paciência'],
+                'Montanhismo': ['Resistência', 'Força', 'Determinação', 'Aventura'],
+                'Polo Aquático': ['Resistência', 'Estratégia', 'Trabalho em equipe', 'Força'],
+                'Natação Sincronizada': ['Arte', 'Coordenação', 'Flexibilidade', 'Elegância'],
+                'Remo': ['Força', 'Resistência', 'Coordenação', 'Trabalho em equipe']
+            };
+            return benefits[sport.name] || ['Condicionamento', 'Saúde', 'Bem-estar'];
+        }
+        
+        // Alternar expansão dos detalhes
+        function toggleExpand(sportName) {
+            const sportId = sportName.replace(/\s+/g, '_');
+            const detailsElement = document.getElementById(`details_${sportId}`);
+            const expandBtn = document.getElementById(`expandBtn_${sportId}`);
+            
+            if (detailsElement && expandBtn) {
+                const isExpanded = detailsElement.classList.contains('expanded');
+                
+                if (isExpanded) {
+                    // Fechar
+                    detailsElement.classList.remove('expanded');
+                    expandBtn.classList.remove('expanded');
+                    expandBtn.innerHTML = '<i class="fas fa-plus"></i>';
+                } else {
+                    // Abrir
+                    detailsElement.classList.add('expanded');
+                    expandBtn.classList.add('expanded');
+                    expandBtn.innerHTML = '<i class="fas fa-times"></i>';
+                }
+            }
+        }
+        
+        
+        // Sistema de banco de dados (mesmo do cadastro)
+        class Database {
+            constructor() {
+                this.dbName = 'pratica_plus_users';
+            }
+            
+            getAllUsers() {
+                return JSON.parse(localStorage.getItem(this.dbName) || '[]');
+            }
+            
+            getUserByEmail(email) {
+                const users = this.getAllUsers();
+                return users.find(user => user.email === email);
+            }
+        }
+        
+        
+        // Configurar filtros (apenas busca e escopo)
+        function setupFilters() {
+            // Busca em tempo real
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                currentFilters.search = e.target.value;
+                
+                const user = checkLogin();
+                if (user) {
+                    const db = new Database();
+                    const fullUserData = db.getUserByEmail(user.email);
+                    if (fullUserData) {
+                        generateSportSuggestions(fullUserData.categorias);
+                    }
+                } else {
+                    const allSportsCopy = [...allSports];
+                    const filteredSports = applyFilters(allSportsCopy);
+                    renderSports(filteredSports);
+                }
+                
+                updateActiveFilters();
+            });
+            
+            // Filtro de escopo
+            document.getElementById('scopeFilter').addEventListener('change', function(e) {
+                currentFilters.scope = e.target.value;
+                
+                // Recarregar esportes baseado no escopo selecionado
+                const user = checkLogin();
+                if (user) {
+                    const db = new Database();
+                    const fullUserData = db.getUserByEmail(user.email);
+                    if (fullUserData) {
+                        generateSportSuggestions(fullUserData.categorias);
+                    }
+                } else {
+                    const allSportsCopy = [...allSports];
+                    const filteredSports = applyFilters(allSportsCopy);
+                    renderSports(filteredSports);
+                }
+                
+                updateActiveFilters();
+            });
+            
+            // Botão limpar filtros
+            document.getElementById('clearFilters').addEventListener('click', clearAllFilters);
+        }
+        
+        // Carregar dados quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            setupFilters();
+            setupSidebar();
+        });
+        
+        // Configurar sidebar específico da página
+        function setupSidebar() {
+            // Gerenciar usuário no sidebar
+            updateUserSection();
+            
+            // Botão de logout
+            const btnLogout = document.getElementById('btnLogout');
+            if (btnLogout) {
+                btnLogout.addEventListener('click', function() {
+                    if (confirm('Tem certeza que deseja sair?')) {
+                        sessionStorage.removeItem('currentUser');
+                        updateUserSection();
+                        alert('Logout realizado com sucesso!');
+                    }
+                });
+            }
+            
+            // Event listeners para links do menu
+            const sportsLink = document.getElementById('sportsLink');
+            if (sportsLink) {
+                sportsLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (checkLogin()) {
+                        window.location.href = 'esportes.html';
+                    }
+                });
+            }
+            
+            const favoritosLink = document.getElementById('favoritosLink');
+            if (favoritosLink) {
+                favoritosLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (checkLogin()) {
+                        window.location.href = 'favoritos.html';
+                    }
+                });
+            }
+        }
+        
+        // Gerenciar usuário no sidebar
+        function updateUserSection() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            const userSection = document.getElementById('userSection');
+            const loginSection = document.getElementById('loginSection');
+            
+            if (currentUser) {
+                try {
+                    const user = JSON.parse(currentUser);
+                    
+                    // Mostrar seção do usuário
+                    userSection.style.display = 'block';
+                    loginSection.style.display = 'none';
+                    
+                    // Atualizar informações do usuário
+                    document.getElementById('userName').textContent = user.nome;
+                    document.getElementById('userEmail').textContent = user.email;
+                    
+                    // Atualizar avatar com primeira letra do nome
+                    const userInitial = document.getElementById('userInitial');
+                    userInitial.textContent = user.nome.charAt(0).toUpperCase();
+                    
+                } catch (error) {
+                    console.error('Erro ao carregar dados do usuário:', error);
+                    showLoginSection();
+                }
+            } else {
+                showLoginSection();
+            }
+        }
+        
+        function showLoginSection() {
+            const userSection = document.getElementById('userSection');
+            const loginSection = document.getElementById('loginSection');
+            
+            userSection.style.display = 'none';
+            loginSection.style.display = 'block';
+        }
+        
+        // Função para mostrar favoritos
+        function showFavorites() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                return;
+            }
+            
+            const user = JSON.parse(currentUser);
+            const userEmail = user.email;
+            const favoritos = JSON.parse(localStorage.getItem(`favoritos_${userEmail}`) || '[]');
+            
+            if (favoritos.length === 0) {
+                return;
+            }
+            
+            // Filtrar apenas esportes favoritados
+            filterFavoritesOnly();
+            
+            // Mostrar botão "Todos os Esportes" e esconder "Meus Favoritos"
+            document.querySelector('.favorites-btn').style.display = 'none';
+            document.querySelector('.show-all-btn').style.display = 'flex';
+        }
+        
+        // Função para mostrar todos os esportes
+        function showAllSports() {
+            // Mostrar todos os cards
+            const sportCards = document.querySelectorAll('.sport-card');
+            sportCards.forEach(card => {
+                card.style.display = 'block';
+            });
+            
+            // Mostrar botão "Meus Favoritos" e esconder "Todos os Esportes"
+            document.querySelector('.favorites-btn').style.display = 'flex';
+            document.querySelector('.show-all-btn').style.display = 'none';
+        }
+        
+        // Verificar se esporte está nos favoritos
+        function isSportFavorited(sportName, userEmail) {
+            const favoritos = JSON.parse(localStorage.getItem(`favoritos_${userEmail}`) || '[]');
+            return favoritos.some(fav => fav.name === sportName);
+        }
+        
+        // Alternar favorito do esporte
+        function toggleFavorite(sportName) {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                return;
+            }
+            
+            const user = JSON.parse(currentUser);
+            const userEmail = user.email;
+            const favoritos = JSON.parse(localStorage.getItem(`favoritos_${userEmail}`) || '[]');
+            
+            const existingIndex = favoritos.findIndex(fav => fav.name === sportName);
+            
+            if (existingIndex > -1) {
+                // Remover dos favoritos
+                favoritos.splice(existingIndex, 1);
+                console.log('❌ Esporte removido dos favoritos:', sportName);
+            } else {
+                // Adicionar aos favoritos
+                const sportData = {
+                    name: sportName,
+                    dateAdded: new Date().toISOString()
+                };
+                favoritos.push(sportData);
+                console.log('✅ Esporte adicionado aos favoritos:', sportName);
+            }
+            
+            // Salvar no localStorage
+            localStorage.setItem(`favoritos_${userEmail}`, JSON.stringify(favoritos));
+            
+            // Atualizar visual do card
+            updateFavoriteVisual(sportName, existingIndex === -1);
+        }
+        
+        // Atualizar visual do favorito
+        function updateFavoriteVisual(sportName, isFavorited) {
+            const favoriteElement = document.querySelector(`[onclick="toggleFavorite('${sportName}')"]`);
+            if (favoriteElement) {
+                if (isFavorited) {
+                    favoriteElement.classList.add('favorited');
+                } else {
+                    favoriteElement.classList.remove('favorited');
+                }
+            }
+        }
+        
+        // Filtrar apenas esportes favoritados
+        function filterFavoritesOnly() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) return;
+            
+            const user = JSON.parse(currentUser);
+            const userEmail = user.email;
+            const favoritos = JSON.parse(localStorage.getItem(`favoritos_${userEmail}`) || '[]');
+            const favoritoNames = favoritos.map(fav => fav.name);
+            
+            // Filtrar cards de esportes
+            const sportCards = document.querySelectorAll('.sport-card');
+            sportCards.forEach(card => {
+                const sportName = card.querySelector('.sport-label').textContent;
+                if (favoritoNames.includes(sportName)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Atualizar contador
+            const visibleCards = document.querySelectorAll('.sport-card[style*="block"], .sport-card:not([style*="none"])');
+            console.log(`Mostrando ${visibleCards.length} esportes favoritos`);
+        }
+        
+        
+        // Função para testar favoritos
+        function testFavorites() {
+            console.log('🧪 Testando sistema de favoritos...');
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                console.log('❌ Usuário não logado');
+                return;
+            }
+            
+            const user = JSON.parse(currentUser);
+            const userEmail = user.email;
+            const favoritos = JSON.parse(localStorage.getItem(`favoritos_${userEmail}`) || '[]');
+            
+            console.log('👤 Usuário:', user.nome);
+            console.log('📧 Email:', userEmail);
+            console.log('⭐ Favoritos atuais:', favoritos);
+            console.log('🔧 Função toggleFavorite:', typeof window.toggleFavorite);
+        }
+        
+        // Funções para o menu dropdown
+        function showSportDetails(sportName) {
+            console.log('📋 Mostrando detalhes do esporte:', sportName);
+            
+            // Dados detalhados dos esportes
+            const sportDetails = {
+                'Futebol': {
+                    description: 'O esporte mais popular do mundo, perfeito para trabalho em equipe e condicionamento físico. Desenvolve coordenação, resistência cardiovascular e habilidades sociais.',
+                    locations: [
+                        { name: 'Campo Municipal', address: 'Rua das Flores, 123 - Centro' },
+                        { name: 'Quadra da Escola', address: 'Av. Principal, 456 - Bairro Novo' },
+                        { name: 'Clube Esportivo', address: 'Rua do Esporte, 789 - Zona Sul' },
+                        { name: 'Praia do Fut', address: 'Orla Marítima - Praia Central' }
+                    ],
+                    basics: [
+                        {
+                            icon: 'fas fa-shoe-prints',
+                            title: 'Equipamentos Básicos',
+                            content: 'Chuteiras, meião, caneleiras e uma bola. Para iniciantes, qualquer tênis esportivo serve.'
+                        },
+                        {
+                            icon: 'fas fa-users',
+                            title: 'Número de Jogadores',
+                            content: '11 jogadores por time (futebol de campo) ou 5-7 jogadores (futsal). Pode ser adaptado para qualquer número.'
+                        },
+                        {
+                            icon: 'fas fa-clock',
+                            title: 'Duração do Jogo',
+                            content: '90 minutos divididos em dois tempos de 45 minutos, com 15 minutos de intervalo.'
+                        },
+                        {
+                            icon: 'fas fa-target',
+                            title: 'Objetivo Principal',
+                            content: 'Marcar gols na baliza adversária. O time que marcar mais gols vence a partida.'
+                        },
+                        {
+                            icon: 'fas fa-running',
+                            title: 'Habilidades Essenciais',
+                            content: 'Controle de bola, passe, chute e corrida. Comece praticando o controle básico da bola.'
+                        }
+                    ]
+                },
+                'Basquete': {
+                    description: 'Esporte dinâmico que desenvolve agilidade, coordenação e espírito competitivo. Excelente para melhorar a altura e coordenação motora.',
+                    locations: [
+                        { name: 'Quadra da Escola', address: 'Av. Principal, 456 - Bairro Novo' },
+                        { name: 'Ginásio Municipal', address: 'Rua do Esporte, 789 - Zona Sul' },
+                        { name: 'Clube de Basquete', address: 'Rua das Quadras, 321 - Centro' }
+                    ],
+                    basics: [
+                        {
+                            icon: 'fas fa-basketball-ball',
+                            title: 'Equipamentos Básicos',
+                            content: 'Bola de basquete, tênis com boa aderência e roupas confortáveis para movimento.'
+                        },
+                        {
+                            icon: 'fas fa-users',
+                            title: 'Número de Jogadores',
+                            content: '5 jogadores por time em quadra. Pode ser jogado 1x1, 2x2, 3x3 ou 5x5.'
+                        },
+                        {
+                            icon: 'fas fa-clock',
+                            title: 'Duração do Jogo',
+                            content: '4 períodos de 10 minutos cada (NBA) ou 2 tempos de 20 minutos (FIBA).'
+                        },
+                        {
+                            icon: 'fas fa-bullseye',
+                            title: 'Objetivo Principal',
+                            content: 'Arremessar a bola na cesta adversária. Cada cesta vale 2 ou 3 pontos dependendo da distância.'
+                        },
+                        {
+                            icon: 'fas fa-hand-rock',
+                            title: 'Habilidades Essenciais',
+                            content: 'Drible, passe, arremesso e rebote. Comece praticando o arremesso próximo à cesta.'
+                        }
+                    ]
+                },
+                'Tênis': {
+                    description: 'Esporte individual que desenvolve concentração, coordenação e resistência. Perfeito para todas as idades e níveis de condicionamento.',
+                    locations: [
+                        { name: 'Clube de Tênis', address: 'Rua das Raquetes, 555 - Zona Norte' },
+                        { name: 'Quadra Municipal', address: 'Parque Central - Centro' },
+                        { name: 'Academia de Tênis', address: 'Av. Esportiva, 888 - Bairro Alto' }
+                    ],
+                    basics: [
+                        {
+                            icon: 'fas fa-table-tennis',
+                            title: 'Equipamentos Básicos',
+                            content: 'Raquete de tênis, bolas e tênis específicos para quadra. Roupas confortáveis e chapéu para proteção solar.'
+                        },
+                        {
+                            icon: 'fas fa-user',
+                            title: 'Modalidades',
+                            content: 'Simples (1x1) ou duplas (2x2). Pode ser jogado em quadras de saibro, grama ou piso duro.'
+                        },
+                        {
+                            icon: 'fas fa-clock',
+                            title: 'Duração do Jogo',
+                            content: 'Melhor de 3 ou 5 sets. Cada set vai até 6 games, com diferença mínima de 2 games.'
+                        },
+                        {
+                            icon: 'fas fa-flag-checkered',
+                            title: 'Objetivo Principal',
+                            content: 'Fazer a bola passar pela rede e quicar no campo adversário sem que o oponente consiga devolver.'
+                        },
+                        {
+                            icon: 'fas fa-hand-paper',
+                            title: 'Habilidades Essenciais',
+                            content: 'Saque, forehand, backhand e voleio. Comece aprendendo o saque e o forehand básico.'
+                        }
+                    ]
+                }
+            };
+            
+            const sport = sportDetails[sportName] || {
+                description: 'Esporte dinâmico que desenvolve agilidade, coordenação e espírito competitivo.',
+                locations: [
+                    { name: 'Local 1', address: 'Endereço exemplo 1' },
+                    { name: 'Local 2', address: 'Endereço exemplo 2' }
+                ],
+                basics: [
+                    {
+                        icon: 'fas fa-info-circle',
+                        title: 'Informações Básicas',
+                        content: 'Este esporte oferece diversos benefícios para a saúde física e mental.'
+                    }
+                ]
+            };
+            
+            // Criar modal
+            const modal = document.createElement('div');
+            modal.className = 'sport-modal';
+            modal.innerHTML = `
+                <div class="sport-modal-content">
+                    <div class="sport-modal-header">
+                        <button class="sport-modal-close" onclick="closeSportModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <h1 class="sport-modal-title">${sportName}</h1>
+                        <p class="sport-modal-subtitle">Informações completas sobre o esporte</p>
+                    </div>
+                    <div class="sport-modal-body">
+                        <div class="sport-modal-section">
+                            <h3><i class="fas fa-info-circle"></i> Sobre o Esporte</h3>
+                            <p class="sport-modal-description">${sport.description}</p>
+                        </div>
+                        
+                        <div class="sport-modal-section">
+                            <h3><i class="fas fa-map-marker-alt"></i> Onde Praticar</h3>
+                            <div class="sport-modal-locations">
+                                ${sport.locations.map(location => `
+                                    <div class="location-item">
+                                        <div class="location-name">${location.name}</div>
+                                        <div class="location-address">${location.address}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="sport-modal-section">
+                            <h3><i class="fas fa-graduation-cap"></i> O Básico para Começar</h3>
+                            <div class="sport-modal-basics">
+                                ${sport.basics.map(basic => `
+                                    <div class="basic-item">
+                                        <div class="basic-icon">
+                                            <i class="${basic.icon}"></i>
+                                        </div>
+                                        <div class="basic-content">
+                                            <h4>${basic.title}</h4>
+                                            <p>${basic.content}</p>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="sport-modal-tags">
+                            <span class="sport-modal-tag">Esporte</span>
+                            <span class="sport-modal-tag">Saúde</span>
+                            <span class="sport-modal-tag">Diversão</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Adicionar ao body
+            document.body.appendChild(modal);
+            
+            // Mostrar modal com animação
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+            
+            // Fechar ao clicar fora do modal
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeSportModal();
+                }
+            });
+        }
+        
+        function closeSportModal() {
+            const modal = document.querySelector('.sport-modal');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    modal.remove();
+                }, 300);
+            }
+        }
+        
+        function addToTraining(sportName) {
+            console.log('💪 Adicionando ao treino:', sportName);
+            alert(`${sportName} adicionado ao seu plano de treino!\n\nEsta funcionalidade será implementada em breve!\n\nAqui você poderá:\n• Criar planos de treino\n• Definir frequência\n• Acompanhar progresso`);
+        }
+        
+        function shareSport(sportName) {
+            console.log('📤 Compartilhando esporte:', sportName);
+            if (navigator.share) {
+                navigator.share({
+                    title: `Confira este esporte: ${sportName}`,
+                    text: `Descubra mais sobre ${sportName} no Pratica+`,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback para navegadores que não suportam Web Share API
+                const shareText = `Confira este esporte: ${sportName} - ${window.location.href}`;
+                navigator.clipboard.writeText(shareText).then(() => {
+                    alert('Link copiado para a área de transferência!');
+                }).catch(() => {
+                    alert(`Compartilhe: ${shareText}`);
+                });
+            }
+        }
+        
+        function findNearby(sportName) {
+            console.log('📍 Procurando locais próximos para:', sportName);
+            alert(`Procurando locais para praticar ${sportName}...\n\nEsta funcionalidade será implementada em breve!\n\nAqui você poderá:\n• Encontrar academias\n• Localizar quadras\n• Descobrir grupos de prática\n• Ver avaliações de locais`);
+        }
+        
+        // Expor funções globalmente
+        window.toggleFavorite = toggleFavorite;
+        window.showFavorites = showFavorites;
+        window.showAllSports = showAllSports;
+        window.testFavorites = testFavorites;
+        window.showSportDetails = showSportDetails;
+        window.closeSportModal = closeSportModal;
+        window.addToTraining = addToTraining;
+        window.shareSport = shareSport;
+        window.findNearby = findNearby;
+        
+        // Sistema de filtros
+        let filteredSports = [];
+        let currentFilter = 'personalized';
+        
+        // Inicializar sistema de filtros
+        function initializeFilters() {
+            const searchInput = document.getElementById('searchInput');
+            const scopeFilter = document.getElementById('scopeFilter');
+            const clearFilters = document.getElementById('clearFilters');
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', handleSearch);
+            }
+            
+            if (scopeFilter) {
+                scopeFilter.addEventListener('change', handleScopeChange);
+            }
+            
+            if (clearFilters) {
+                clearFilters.addEventListener('click', clearAllFilters);
+            }
+        }
+        
+        // Função de busca
+        function handleSearch(event) {
+            const searchTerm = event.target.value.toLowerCase().trim();
+            console.log('🔍 Buscando por:', searchTerm);
+            
+            if (searchTerm === '') {
+                // Se não há termo de busca, mostrar todos os esportes do escopo atual
+                if (currentFilter === 'personalized') {
+                    loadSportsBasedOnCategories(getUserCategories());
+                } else {
+                    loadAllSports();
+                }
+            } else {
+                // Filtrar esportes por termo de busca
+                filterSportsBySearch(searchTerm);
+            }
+        }
+        
+        // Função de mudança de escopo
+        function handleScopeChange(event) {
+            currentFilter = event.target.value;
+            console.log('📋 Escopo alterado para:', currentFilter);
+            
+            // Limpar busca
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = '';
+            }
+            
+            if (currentFilter === 'personalized') {
+                loadSportsBasedOnCategories(getUserCategories());
+            } else {
+                loadAllSports();
+            }
+        }
+        
+        // Filtrar esportes por busca
+        function filterSportsBySearch(searchTerm) {
+            const sportsGrid = document.getElementById('sportsGrid');
+            if (!sportsGrid) return;
+            
+            const sportCards = sportsGrid.querySelectorAll('.sport-card');
+            let visibleCount = 0;
+            
+            sportCards.forEach(card => {
+                const sportName = card.querySelector('.sport-label')?.textContent.toLowerCase() || '';
+                const sportDescription = card.querySelector('.sport-description')?.textContent.toLowerCase() || '';
+                const sportTags = Array.from(card.querySelectorAll('.sport-tag')).map(tag => tag.textContent.toLowerCase());
+                
+                const matchesSearch = sportName.includes(searchTerm) || 
+                                   sportDescription.includes(searchTerm) ||
+                                   sportTags.some(tag => tag.includes(searchTerm));
+                
+                if (matchesSearch) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Atualizar informações dos resultados
+            updateResultsInfo(visibleCount, searchTerm);
+            
+            // Mostrar/ocultar mensagem de "nenhum resultado"
+            const noResults = document.getElementById('noResults');
+            if (noResults) {
+                noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+        }
+        
+        // Carregar todos os esportes
+        function loadAllSports() {
+            console.log('📋 Carregando todos os esportes...');
+            
+            // Definir todos os esportes disponíveis
+            const allSportsData = [
+                { name: 'Futebol', category: 'Esportes coletivos', description: 'O esporte mais popular do mundo, perfeito para trabalho em equipe e condicionamento físico.' },
+                { name: 'Basquete', category: 'Esportes coletivos', description: 'Esporte dinâmico que desenvolve agilidade, coordenação e espírito competitivo.' },
+                { name: 'Vôlei', category: 'Esportes coletivos', description: 'Esporte de rede que trabalha coordenação, reflexos e trabalho em equipe.' },
+                { name: 'Handebol', category: 'Esportes coletivos', description: 'Esporte com bola nas mãos que desenvolve força, agilidade e estratégia.' },
+                { name: 'Tênis', category: 'Esportes individuais', description: 'Esporte de raquete individual que trabalha precisão, estratégia e resistência.' },
+                { name: 'Atletismo', category: 'Esportes individuais', description: 'Corrida, salto e arremesso que desenvolvem velocidade, força e resistência.' },
+                { name: 'Natação', category: 'Esportes individuais', description: 'Esporte aquático completo que trabalha todo o corpo e sistema cardiovascular.' },
+                { name: 'Ciclismo', category: 'Esportes individuais', description: 'Esporte sobre duas rodas que desenvolve resistência e coordenação.' },
+                { name: 'Musculação', category: 'Musculação', description: 'Treinamento com pesos que desenvolve força, resistência e massa muscular.' },
+                { name: 'Boxe', category: 'Esportes de combate/luta', description: 'Arte marcial com punhos que desenvolve força, agilidade e autodefesa.' },
+                { name: 'Jiu-Jitsu', category: 'Esportes de combate/luta', description: 'Arte marcial de solo que trabalha técnica, flexibilidade e estratégia.' },
+                { name: 'Kickboxing', category: 'Esportes de combate/luta', description: 'Combate com chutes e socos que desenvolve agilidade e resistência.' },
+                { name: 'Muay Thai', category: 'Esportes de combate/luta', description: 'Arte marcial tailandesa que trabalha força, flexibilidade e disciplina.' },
+                { name: 'Surf', category: 'Esportes aquáticos', description: 'Esporte nas ondas do mar que desenvolve equilíbrio e conexão com a natureza.' },
+                { name: 'Skate', category: 'Esportes urbanos', description: 'Esporte urbano que desenvolve equilíbrio, criatividade e coragem.', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy46-TCO1pPW10lP0v6du0Fh9Iwem1cl8UOg&s' },
+                { name: 'Escalada', category: 'Esportes de aventura/natureza', description: 'Esporte vertical que trabalha força, resistência e superação de medos.' },
+                { name: 'Yoga', category: 'Bem-estar', description: 'Prática que combina posturas, respiração e meditação para bem-estar.' },
+                { name: 'Pilates', category: 'Bem-estar', description: 'Método de exercícios que fortalece o core e melhora a postura.' },
+                { name: 'Crossfit', category: 'Musculação', description: 'Treinamento funcional de alta intensidade que trabalha todo o corpo.' },
+                { name: 'Dança', category: 'Arte', description: 'Arte do movimento que desenvolve coordenação, ritmo e expressão.' },
+                { name: 'Ginástica', category: 'Esportes individuais', description: 'Esporte que combina força, flexibilidade e precisão em movimentos.' }
+            ];
+            
+            // Limpar grid atual
+            const sportsGrid = document.getElementById('sportsGrid');
+            if (sportsGrid) {
+                sportsGrid.innerHTML = '';
+                
+                // Criar cards para todos os esportes
+                allSportsData.forEach(sport => {
+                    const card = createSportCard(sport);
+                    sportsGrid.appendChild(card);
+                });
+                
+                console.log('✅ Todos os esportes carregados:', allSportsData.length);
+                updateResultsInfo(allSportsData.length);
+            }
+        }
+        
+        // Obter categorias do usuário
+        function getUserCategories() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                return user.preferencias?.esportesInteresse || [];
+            }
+            return [];
+        }
+        
+        // Atualizar informações dos resultados
+        function updateResultsInfo(count, searchTerm = '') {
+            const resultsInfo = document.getElementById('resultsInfo');
+            if (resultsInfo) {
+                if (searchTerm) {
+                    resultsInfo.innerHTML = `<p><strong>${count}</strong> esporte(s) encontrado(s) para "${searchTerm}"</p>`;
+                } else {
+                    resultsInfo.innerHTML = `<p><strong>${count}</strong> esporte(s) disponível(is)</p>`;
+                }
+            }
+        }
+        
+        // Limpar todos os filtros
+        function clearAllFilters() {
+            console.log('🧹 Limpando todos os filtros...');
+            
+            // Limpar busca
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = '';
+            }
+            
+            // Resetar escopo para personalizado
+            const scopeFilter = document.getElementById('scopeFilter');
+            if (scopeFilter) {
+                scopeFilter.value = 'personalized';
+                currentFilter = 'personalized';
+            }
+            
+            // Recarregar esportes personalizados
+            loadSportsBasedOnCategories(getUserCategories());
+        }
+        
+        // Função para gerenciar ícones de cadeado
+        function updateLockIcons() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            const sportsLock = document.getElementById('sportsLock');
+            const favoritosLock = document.getElementById('favoritosLock');
+            
+            if (currentUser) {
+                // Usuário logado - esconder cadeados
+                if (sportsLock) {
+                    sportsLock.classList.add('hidden');
+                }
+                if (favoritosLock) {
+                    favoritosLock.classList.add('hidden');
+                }
+                console.log('🔓 Cadeados removidos - usuário logado');
+            } else {
+                // Usuário não logado - mostrar cadeados
+                if (sportsLock) {
+                    sportsLock.classList.remove('hidden');
+                }
+                if (favoritosLock) {
+                    favoritosLock.classList.remove('hidden');
+                }
+                console.log('🔒 Cadeados exibidos - usuário não logado');
+            }
+        }
+        
+        // Aguardar o DOM estar pronto
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DOM carregado, iniciando aplicação...');
+            loadUserProfile();
+            updateLockIcons();
+            // Aguardar um pouco para garantir que o perfil foi carregado
+            setTimeout(() => {
+                initializeFilters();
+            }, 500);
+        });
+    </script>
+</body>
+</html>

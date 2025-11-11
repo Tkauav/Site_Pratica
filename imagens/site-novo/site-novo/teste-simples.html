@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Simples</title>
+    <style>
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        
+        .user-area {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            background: #e0f0ff;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        
+        .user-area.show {
+            display: flex !important;
+        }
+        
+        .btn-login, .btn-register {
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #28a745;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .user-name {
+            font-weight: bold;
+        }
+        
+        .btn-logout {
+            padding: 6px 12px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .test-buttons {
+            margin: 20px 0;
+        }
+        
+        .test-btn {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Teste Simples de Usuário Logado</h1>
+    
+    <div class="test-buttons">
+        <button class="test-btn" onclick="simularLogin()">Simular Login</button>
+        <button class="test-btn" onclick="simularLogout()">Simular Logout</button>
+        <button class="test-btn" onclick="verificarStatus()">Verificar Status</button>
+    </div>
+    
+    <div class="nav-actions" id="navActions">
+        <button class="btn-login">Login</button>
+        <button class="btn-register">Cadastrar</button>
+    </div>
+    
+    <div class="user-area" id="userArea">
+        <div class="user-avatar">
+            <span id="userInitial">U</span>
+        </div>
+        <div class="user-details">
+            <span class="user-name" id="userName">Usuário</span>
+            <button class="btn-logout" id="btnLogout">Sair</button>
+        </div>
+    </div>
+    
+    <div id="status">Status: Não logado</div>
+
+    <script>
+        function simularLogin() {
+            console.log('Simulando login...');
+            
+            const userData = {
+                id: 'test123',
+                nome: 'João Silva',
+                email: 'joao@teste.com'
+            };
+            
+            sessionStorage.setItem('currentUser', JSON.stringify(userData));
+            updateHeader();
+            
+            console.log('Login simulado:', userData);
+        }
+        
+        function simularLogout() {
+            console.log('Simulando logout...');
+            
+            sessionStorage.removeItem('currentUser');
+            updateHeader();
+            
+            console.log('Logout simulado');
+        }
+        
+        function verificarStatus() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            console.log('Status atual:', currentUser);
+            
+            const statusDiv = document.getElementById('status');
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                statusDiv.textContent = `Status: Logado como ${user.nome}`;
+            } else {
+                statusDiv.textContent = 'Status: Não logado';
+            }
+        }
+        
+        function updateHeader() {
+            console.log('Atualizando header...');
+            
+            const currentUser = sessionStorage.getItem('currentUser');
+            const navActions = document.getElementById('navActions');
+            const userArea = document.getElementById('userArea');
+            const userName = document.getElementById('userName');
+            const userInitial = document.getElementById('userInitial');
+            
+            console.log('Elementos encontrados:', {
+                navActions: !!navActions,
+                userArea: !!userArea,
+                userName: !!userName,
+                userInitial: !!userInitial
+            });
+            
+            if (currentUser) {
+                try {
+                    const user = JSON.parse(currentUser);
+                    console.log('Dados do usuário:', user);
+                    
+                    // Mostrar área do usuário e esconder botões de login
+                    if (userArea) {
+                        userArea.classList.add('show');
+                        console.log('Adicionada classe show ao userArea');
+                    }
+                    if (navActions) {
+                        navActions.style.display = 'none';
+                        console.log('Escondidos navActions');
+                    }
+                    
+                    // Atualizar informações do usuário
+                    if (userName) userName.textContent = user.nome;
+                    if (userInitial) userInitial.textContent = user.nome.charAt(0).toUpperCase();
+                    
+                    console.log('Header atualizado para usuário logado');
+                    
+                } catch (error) {
+                    console.error('Erro ao carregar dados do usuário:', error);
+                    showLoginButtons();
+                }
+            } else {
+                console.log('Nenhum usuário logado, mostrando botões de login');
+                showLoginButtons();
+            }
+        }
+        
+        function showLoginButtons() {
+            console.log('Mostrando botões de login...');
+            
+            const navActions = document.getElementById('navActions');
+            const userArea = document.getElementById('userArea');
+            
+            if (navActions) navActions.style.display = 'flex';
+            if (userArea) {
+                userArea.classList.remove('show');
+            }
+            
+            console.log('Botões de login mostrados');
+        }
+        
+        // Event listener para botão de logout
+        document.getElementById('btnLogout').addEventListener('click', function() {
+            if (confirm('Tem certeza que deseja sair?')) {
+                sessionStorage.removeItem('currentUser');
+                updateHeader();
+                alert('Logout realizado com sucesso!');
+            }
+        });
+        
+        // Atualizar header quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Página carregada, atualizando header...');
+            updateHeader();
+        });
+        
+        // Atualizar header quando a página ganhar foco
+        window.addEventListener('focus', function() {
+            console.log('Página ganhou foco, atualizando header...');
+            updateHeader();
+        });
+    </script>
+</body>
+</html>
+

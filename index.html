@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pratica+ - Acelere sua presença digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <h2>Pratica+</h2>
+            </div>
+            
+            <!-- Botões para usuário não logado -->
+            <div class="nav-actions" id="navActions">
+                <a href="login.html" class="btn-login">Login</a>
+                <a href="cadastro.html" class="btn-register">Cadastrar</a>
+            </div>
+            
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Descubra seu esporte ideal!</h1>
+                <p>Conecte-se com esportes personalizados, encontre notícias exclusivas e faça parte de uma comunidade ativa. Tudo isso em um só lugar!</p>
+        <div class="actions">
+            <a class="btn primary" href="portal.html"><i class="fas fa-rocket"></i> Explorar Esportes</a>
+            <a class="btn secondary" href="portal.html"><i class="fas fa-newspaper"></i> Ver Notícias</a>
+        </div>
+            </div>
+        </section>
+        
+        <section class="cta">
+            <!-- Seção de Patrocinadores -->
+            <div class="sponsors-section">
+                <h3>Nossos Parceiros</h3>
+                <div class="sponsors-grid">
+                    <a href="https://www.nike.com.br/" target="_blank" class="sponsor-item">
+                        <div class="sponsor-logo nike">Nike</div>
+                        <span class="sponsor-name">Nike</span>
+                    </a>
+                    <a href="https://www.adidas.com.br/" target="_blank" class="sponsor-item">
+                        <div class="sponsor-logo adidas">Adidas</div>
+                        <span class="sponsor-name">Adidas</span>
+                    </a>
+                    <a href="https://br.puma.com/" target="_blank" class="sponsor-item">
+                        <div class="sponsor-logo puma">Puma</div>
+                        <span class="sponsor-name">Puma</span>
+                    </a>
+                    <a href="https://www.reebok.com.br/" target="_blank" class="sponsor-item">
+                        <div class="sponsor-logo reebok">Reebok</div>
+                        <span class="sponsor-name">Reebok</span>
+                    </a>
+                    <a href="https://www.underarmour.com.br/" target="_blank" class="sponsor-item">
+                        <div class="sponsor-logo under-armour">Under Armour</div>
+                        <span class="sponsor-name">Under Armour</span>
+                    </a>
+                    <a href="https://www.newbalance.com.br/" target="_blank" class="sponsor-item">
+                        <div class="sponsor-logo new-balance">New Balance</div>
+                        <span class="sponsor-name">New Balance</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="site-footer">
+        <small>2025 Pratica+</small>
+    </footer>
+    
+    <script src="firebase-config.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Garantir que apenas os botões de login e cadastro sejam sempre visíveis
+        document.addEventListener('DOMContentLoaded', function() {
+            const navActions = document.getElementById('navActions');
+            if (navActions) {
+                navActions.style.display = 'flex';
+                navActions.style.visibility = 'visible';
+                navActions.style.opacity = '1';
+            }
+            
+            // Teste do Firebase
+            testarFirebase();
+        });
+        
+        // Função para testar se o Firebase está funcionando
+        function testarFirebase() {
+            console.log('🔥 Testando Firebase...');
+            
+            // Verificar se o Firebase foi carregado
+            if (typeof firebase === 'undefined') {
+                console.error('❌ Firebase não foi carregado!');
+                return;
+            }
+            
+            console.log('✅ Firebase carregado com sucesso!');
+            
+            // Verificar se as configurações estão corretas
+            try {
+                const app = firebase.app();
+                console.log('✅ Firebase app inicializado:', app.name);
+                
+                // Verificar se o Firestore está disponível
+                if (typeof firebase.firestore !== 'undefined') {
+                    console.log('✅ Firestore disponível!');
+                } else {
+                    console.error('❌ Firestore não está disponível!');
+                    return;
+                }
+                
+                // Verificar se o Auth está disponível
+                if (typeof firebase.auth !== 'undefined') {
+                    console.log('✅ Authentication disponível!');
+                } else {
+                    console.error('❌ Authentication não está disponível!');
+                    return;
+                }
+                
+                console.log('🎉 Firebase está 100% funcional!');
+                
+            } catch (error) {
+                console.error('❌ Erro na inicialização do Firebase:', error);
+            }
+        }
+    </script>
+</body>
+</html>

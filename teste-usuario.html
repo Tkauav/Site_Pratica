@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Usuário Logado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f0f0f0;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .test-btn {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .test-btn:hover {
+            background: #0056b3;
+        }
+        
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background: #e9ecef;
+        }
+        
+        .log {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Teste de Usuário Logado</h1>
+        
+        <div class="test-buttons">
+            <button class="test-btn" onclick="testarLogin()">Simular Login</button>
+            <button class="test-btn" onclick="testarLogout()">Simular Logout</button>
+            <button class="test-btn" onclick="verificarStatus()">Verificar Status</button>
+            <button class="test-btn" onclick="abrirIndex()">Abrir Index</button>
+        </div>
+        
+        <div class="status" id="status">
+            Status: Não logado
+        </div>
+        
+        <div class="log" id="log">
+            Log de eventos aparecerá aqui...
+        </div>
+    </div>
+
+    <script>
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}<br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function updateStatus() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            const statusDiv = document.getElementById('status');
+            
+            if (currentUser) {
+                try {
+                    const user = JSON.parse(currentUser);
+                    statusDiv.innerHTML = `Status: Logado como <strong>${user.nome}</strong> (${user.email})`;
+                    statusDiv.style.background = '#d4edda';
+                    statusDiv.style.color = '#155724';
+                } catch (error) {
+                    statusDiv.innerHTML = 'Status: Erro ao carregar dados do usuário';
+                    statusDiv.style.background = '#f8d7da';
+                    statusDiv.style.color = '#721c24';
+                }
+            } else {
+                statusDiv.innerHTML = 'Status: Não logado';
+                statusDiv.style.background = '#e9ecef';
+                statusDiv.style.color = '#495057';
+            }
+        }
+        
+        function testarLogin() {
+            log('Iniciando teste de login...');
+            
+            const userData = {
+                id: 'test123',
+                nome: 'João Silva',
+                email: 'joao@teste.com'
+            };
+            
+            sessionStorage.setItem('currentUser', JSON.stringify(userData));
+            log(`Usuário logado: ${userData.nome} (${userData.email})`);
+            
+            updateStatus();
+        }
+        
+        function testarLogout() {
+            log('Iniciando teste de logout...');
+            
+            sessionStorage.removeItem('currentUser');
+            log('Usuário deslogado');
+            
+            updateStatus();
+        }
+        
+        function verificarStatus() {
+            log('Verificando status atual...');
+            
+            const currentUser = sessionStorage.getItem('currentUser');
+            log(`Dados no sessionStorage: ${currentUser || 'Nenhum'}`);
+            
+            updateStatus();
+        }
+        
+        function abrirIndex() {
+            log('Abrindo index.html...');
+            window.open('index.html', '_blank');
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            log('Página de teste carregada');
+            updateStatus();
+        });
+        
+        // Atualizar status quando a página ganhar foco
+        window.addEventListener('focus', function() {
+            log('Página ganhou foco, atualizando status...');
+            updateStatus();
+        });
+    </script>
+</body>
+</html>
+

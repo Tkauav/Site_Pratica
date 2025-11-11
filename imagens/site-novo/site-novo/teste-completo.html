@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Completo - Usuário Logado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f0f0f0;
+        }
+        
+        .header {
+            background: #0e2a3f;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .user-area {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0,188,212,0.2);
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .user-area.show {
+            display: flex !important;
+        }
+        
+        .btn-login, .btn-register {
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-register {
+            background: #28a745;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #00bcd4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .user-name {
+            font-weight: bold;
+            color: white;
+        }
+        
+        .btn-logout {
+            padding: 6px 12px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .test-buttons {
+            padding: 20px;
+            background: white;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-btn {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .test-btn:hover {
+            opacity: 0.8;
+        }
+        
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background: #e9ecef;
+            font-family: monospace;
+        }
+        
+        .log {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">Pratica+</div>
+        
+        <!-- Botões para usuário não logado -->
+        <div class="nav-actions" id="navActions">
+            <a href="#" class="btn-login">Login</a>
+            <a href="#" class="btn-register">Cadastrar</a>
+        </div>
+        
+        <!-- Área do usuário logado -->
+        <div class="user-area" id="userArea">
+            <div class="user-avatar">
+                <span id="userInitial">U</span>
+            </div>
+            <div class="user-details">
+                <span class="user-name" id="userName">Usuário</span>
+                <button class="btn-logout" id="btnLogout">Sair</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-buttons">
+        <h2>Teste de Usuário Logado</h2>
+        
+        <div>
+            <button class="test-btn" onclick="simularLogin()">Simular Login</button>
+            <button class="test-btn" onclick="simularLogout()">Simular Logout</button>
+            <button class="test-btn" onclick="forcarEsconder()">Forçar Esconder</button>
+            <button class="test-btn" onclick="forcarMostrar()">Forçar Mostrar</button>
+            <button class="test-btn" onclick="testeVisual()">Teste Visual</button>
+            <button class="test-btn" onclick="verificarStatus()">Verificar Status</button>
+        </div>
+        
+        <div class="status" id="status">
+            Status: Não logado
+        </div>
+        
+        <div class="log" id="log">
+            Log de eventos aparecerá aqui...
+        </div>
+    </div>
+
+    <script>
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}<br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+        
+        function updateStatus() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            const statusDiv = document.getElementById('status');
+            
+            if (currentUser) {
+                try {
+                    const user = JSON.parse(currentUser);
+                    statusDiv.innerHTML = `Status: Logado como <strong>${user.nome}</strong> (${user.email})`;
+                    statusDiv.style.background = '#d4edda';
+                    statusDiv.style.color = '#155724';
+                } catch (error) {
+                    statusDiv.innerHTML = 'Status: Erro ao carregar dados do usuário';
+                    statusDiv.style.background = '#f8d7da';
+                    statusDiv.style.color = '#721c24';
+                }
+            } else {
+                statusDiv.innerHTML = 'Status: Não logado';
+                statusDiv.style.background = '#e9ecef';
+                statusDiv.style.color = '#495057';
+            }
+        }
+        
+        function simularLogin() {
+            log('🧪 SIMULANDO LOGIN...');
+            
+            const userData = {
+                id: 'test123',
+                nome: 'João Silva',
+                email: 'joao@teste.com'
+            };
+            
+            sessionStorage.setItem('currentUser', JSON.stringify(userData));
+            log(`Usuário logado: ${userData.nome}`);
+            
+            updateHeader();
+            updateStatus();
+        }
+        
+        function simularLogout() {
+            log('🧪 SIMULANDO LOGOUT...');
+            
+            sessionStorage.removeItem('currentUser');
+            log('Usuário deslogado');
+            
+            updateHeader();
+            updateStatus();
+        }
+        
+        function forcarEsconder() {
+            log('🔧 FORÇANDO ESCONDER BOTÕES...');
+            
+            const navActions = document.getElementById('navActions');
+            const userArea = document.getElementById('userArea');
+            
+            if (navActions) {
+                navActions.style.display = 'none';
+                navActions.style.visibility = 'hidden';
+                navActions.style.opacity = '0';
+                log('✅ Botões escondidos');
+            }
+            
+            if (userArea) {
+                userArea.style.display = 'flex';
+                userArea.style.visibility = 'visible';
+                userArea.style.opacity = '1';
+                userArea.classList.add('show');
+                log('✅ Área do usuário mostrada');
+            }
+        }
+        
+        function forcarMostrar() {
+            log('🔧 FORÇANDO MOSTRAR BOTÕES...');
+            
+            const navActions = document.getElementById('navActions');
+            const userArea = document.getElementById('userArea');
+            
+            if (navActions) {
+                navActions.style.display = 'flex';
+                navActions.style.visibility = 'visible';
+                navActions.style.opacity = '1';
+                log('✅ Botões mostrados');
+            }
+            
+            if (userArea) {
+                userArea.style.display = 'none';
+                userArea.style.visibility = 'hidden';
+                userArea.style.opacity = '0';
+                userArea.classList.remove('show');
+                log('✅ Área do usuário escondida');
+            }
+        }
+        
+        function testeVisual() {
+            log('🎨 TESTE VISUAL...');
+            
+            const navActions = document.getElementById('navActions');
+            const userArea = document.getElementById('userArea');
+            
+            if (navActions) {
+                navActions.style.backgroundColor = 'red';
+                navActions.style.border = '3px solid yellow';
+                log('navActions colorido de vermelho');
+            }
+            
+            if (userArea) {
+                userArea.style.backgroundColor = 'blue';
+                userArea.style.border = '3px solid green';
+                userArea.style.display = 'flex';
+                log('userArea colorido de azul');
+            }
+            
+            setTimeout(() => {
+                if (navActions) {
+                    navActions.style.backgroundColor = '';
+                    navActions.style.border = '';
+                }
+                if (userArea) {
+                    userArea.style.backgroundColor = '';
+                    userArea.style.border = '';
+                }
+                log('Cores resetadas');
+            }, 3000);
+        }
+        
+        function verificarStatus() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            const navActions = document.getElementById('navActions');
+            const userArea = document.getElementById('userArea');
+            
+            log('📊 STATUS ATUAL:');
+            log(`Usuário: ${currentUser || 'Nenhum'}`);
+            log(`navActions display: ${navActions ? navActions.style.display : 'não encontrado'}`);
+            log(`userArea display: ${userArea ? userArea.style.display : 'não encontrado'}`);
+            log(`userArea classList: ${userArea ? userArea.classList.toString() : 'não encontrado'}`);
+        }
+        
+        function updateHeader() {
+            log('🔄 ATUALIZANDO HEADER...');
+            
+            const currentUser = sessionStorage.getItem('currentUser');
+            const navActions = document.getElementById('navActions');
+            const userArea = document.getElementById('userArea');
+            const userName = document.getElementById('userName');
+            const userInitial = document.getElementById('userInitial');
+            
+            if (currentUser) {
+                try {
+                    const user = JSON.parse(currentUser);
+                    log(`Usuário encontrado: ${user.nome}`);
+                    
+                    // Esconder botões de login
+                    if (navActions) {
+                        navActions.style.display = 'none';
+                        navActions.style.visibility = 'hidden';
+                        navActions.style.opacity = '0';
+                        log('Botões de login escondidos');
+                    }
+                    
+                    // Mostrar área do usuário
+                    if (userArea) {
+                        userArea.style.display = 'flex';
+                        userArea.style.visibility = 'visible';
+                        userArea.style.opacity = '1';
+                        userArea.classList.add('show');
+                        log('Área do usuário mostrada');
+                    }
+                    
+                    // Atualizar informações
+                    if (userName) userName.textContent = user.nome;
+                    if (userInitial) userInitial.textContent = user.nome.charAt(0).toUpperCase();
+                    
+                    log('✅ Header atualizado para usuário logado');
+                    
+                } catch (error) {
+                    log(`❌ Erro: ${error.message}`);
+                }
+            } else {
+                log('Nenhum usuário logado');
+                showLoginButtons();
+            }
+        }
+        
+        function showLoginButtons() {
+            log('🔄 MOSTRANDO BOTÕES DE LOGIN...');
+            
+            const navActions = document.getElementById('navActions');
+            const userArea = document.getElementById('userArea');
+            
+            if (navActions) {
+                navActions.style.display = 'flex';
+                navActions.style.visibility = 'visible';
+                navActions.style.opacity = '1';
+                log('Botões de login mostrados');
+            }
+            
+            if (userArea) {
+                userArea.style.display = 'none';
+                userArea.style.visibility = 'hidden';
+                userArea.style.opacity = '0';
+                userArea.classList.remove('show');
+                log('Área do usuário escondida');
+            }
+        }
+        
+        // Event listener para logout
+        document.getElementById('btnLogout').addEventListener('click', function() {
+            if (confirm('Tem certeza que deseja sair?')) {
+                sessionStorage.removeItem('currentUser');
+                updateHeader();
+                updateStatus();
+                alert('Logout realizado!');
+            }
+        });
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🚀 PÁGINA CARREGADA');
+            updateHeader();
+            updateStatus();
+        });
+        
+        // Atualizar quando ganhar foco
+        window.addEventListener('focus', function() {
+            log('🔄 PÁGINA GANHOU FOCO');
+            updateHeader();
+            updateStatus();
+        });
+    </script>
+</body>
+</html>
+

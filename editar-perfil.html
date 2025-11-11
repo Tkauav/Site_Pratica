@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - Pratica+</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .edit-profile-container {
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 20px;
+        }
+        
+        .edit-profile-form {
+            background: #fff;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1A2332;
+            margin-bottom: 10px;
+        }
+        
+        .form-subtitle {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #00bcd4;
+            box-shadow: 0 0 0 3px rgba(0,188,212,0.1);
+        }
+        
+        .form-input:disabled {
+            background: #f8f9fa;
+            color: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        .categories-section {
+            margin-bottom: 30px;
+        }
+        
+        .categories-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1A2332;
+            margin-bottom: 15px;
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .category-item {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .category-item:hover {
+            border-color: #00bcd4;
+            background: #f0fdff;
+        }
+        
+        .category-item.selected {
+            background: linear-gradient(135deg, #00bcd4, #00acc1);
+            border-color: #00acc1;
+            color: #001018;
+        }
+        
+        .category-item.selected .category-icon {
+            color: #001018;
+        }
+        
+        .category-icon {
+            font-size: 32px;
+            color: #00bcd4;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .category-name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .category-description {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .btn-save {
+            background: linear-gradient(135deg, #00bcd4, #00acc1);
+            color: #001018;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .btn-save:hover {
+            background: linear-gradient(135deg, #00acc1, #0097a7);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,188,212,0.3);
+        }
+        
+        .btn-cancel {
+            background: #6c757d;
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .btn-cancel:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .back-btn {
+            background: linear-gradient(135deg, #00bcd4, #00acc1);
+            color: #001018;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .back-btn:hover {
+            background: linear-gradient(135deg, #00acc1, #0097a7);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,188,212,0.3);
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            display: none;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .edit-profile-form {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="edit-profile-container">
+        <button class="back-btn" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </button>
+        
+        <div class="edit-profile-form">
+            <div class="form-header">
+                <h1 class="form-title">Editar Perfil</h1>
+                <p class="form-subtitle">Atualize suas informações pessoais e preferências</p>
+            </div>
+            
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle"></i> Perfil atualizado com sucesso!
+            </div>
+            
+            <div class="error-message" id="errorMessage">
+                <i class="fas fa-exclamation-circle"></i> <span id="errorText"></span>
+            </div>
+            
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label class="form-label" for="nome">Nome Completo</label>
+                    <input type="text" class="form-input" id="nome" name="nome" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="email">E-mail</label>
+                    <input type="email" class="form-input" id="email" name="email" disabled>
+                    <small style="color: #7f8c8d; font-size: 12px;">O e-mail não pode ser alterado</small>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="dataNascimento">Data de Nascimento</label>
+                    <input type="date" class="form-input" id="dataNascimento" name="dataNascimento" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="esporteFavorito">Esporte Favorito</label>
+                    <input type="text" class="form-input" id="esporteFavorito" name="esporteFavorito" placeholder="Ex: Futebol, Natação, Tênis...">
+                </div>
+                
+                <div class="categories-section">
+                    <h3 class="categories-title">Categorias de Esportes (Selecione até 3)</h3>
+                    <div class="categories-grid">
+                        <div class="category-item" data-category="coletivos">
+                            <i class="fas fa-users category-icon"></i>
+                            <div class="category-name">Esportes Coletivos</div>
+                            <div class="category-description">Futebol, Basquete, Vôlei</div>
+                        </div>
+                        <div class="category-item" data-category="individuais">
+                            <i class="fas fa-user category-icon"></i>
+                            <div class="category-name">Esportes Individuais</div>
+                            <div class="category-description">Tênis, Atletismo, Natação</div>
+                        </div>
+                        <div class="category-item" data-category="combate">
+                            <i class="fas fa-fist-raised category-icon"></i>
+                            <div class="category-name">Esportes de Combate</div>
+                            <div class="category-description">Boxe, Muay Thai, Jiu-Jitsu</div>
+                        </div>
+                        <div class="category-item" data-category="velocidade">
+                            <i class="fas fa-tachometer-alt category-icon"></i>
+                            <div class="category-name">Esportes de Velocidade</div>
+                            <div class="category-description">Ciclismo, Corrida, Skate</div>
+                        </div>
+                        <div class="category-item" data-category="aventura">
+                            <i class="fas fa-mountain category-icon"></i>
+                            <div class="category-name">Esportes de Aventura</div>
+                            <div class="category-description">Escalada, Surf, Montanhismo</div>
+                        </div>
+                        <div class="category-item" data-category="aquaticos">
+                            <i class="fas fa-swimmer category-icon"></i>
+                            <div class="category-name">Esportes Aquáticos</div>
+                            <div class="category-description">Natação, Polo Aquático, Remo</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="window.history.back()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn-save">
+                        <i class="fas fa-save"></i> Salvar Alterações
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Sistema de Banco de Dados
+        class Database {
+            constructor() {
+                this.dbName = 'pratica_plus_users';
+            }
+            
+            getAllUsers() {
+                return JSON.parse(localStorage.getItem(this.dbName) || '[]');
+            }
+            
+            getUserByEmail(email) {
+                const users = this.getAllUsers();
+                return users.find(user => user.email === email);
+            }
+            
+            updateUser(email, userData) {
+                const users = this.getAllUsers();
+                const userIndex = users.findIndex(user => user.email === email);
+                
+                if (userIndex !== -1) {
+                    users[userIndex] = { ...users[userIndex], ...userData };
+                    localStorage.setItem(this.dbName, JSON.stringify(users));
+                    return users[userIndex];
+                }
+                return null;
+            }
+        }
+        
+        // Verificar se usuário está logado
+        function checkLogin() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                alert('Você precisa fazer login para acessar esta página.');
+                window.location.href = 'login.html';
+                return null;
+            }
+            return JSON.parse(currentUser);
+        }
+        
+        // Carregar dados do usuário
+        function loadUserData() {
+            const user = checkLogin();
+            if (!user) return;
+            
+            const db = new Database();
+            const fullUserData = db.getUserByEmail(user.email);
+            
+            if (fullUserData) {
+                // Preencher formulário
+                document.getElementById('nome').value = fullUserData.nome;
+                document.getElementById('email').value = fullUserData.email;
+                document.getElementById('dataNascimento').value = fullUserData.dataNascimento;
+                document.getElementById('esporteFavorito').value = fullUserData.esporteFavorito || '';
+                
+                // Selecionar categorias
+                if (fullUserData.categorias && fullUserData.categorias.length > 0) {
+                    fullUserData.categorias.forEach(category => {
+                        const categoryElement = document.querySelector(`[data-category="${category.id}"]`);
+                        if (categoryElement) {
+                            categoryElement.classList.add('selected');
+                        }
+                    });
+                }
+            }
+        }
+        
+        // Funcionalidade de seleção de categorias
+        function setupCategorySelection() {
+            const categoryItems = document.querySelectorAll('.category-item');
+            
+            categoryItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const isSelected = this.classList.contains('selected');
+                    const selectedCount = document.querySelectorAll('.category-item.selected').length;
+                    
+                    if (isSelected) {
+                        this.classList.remove('selected');
+                    } else {
+                        if (selectedCount < 3) {
+                            this.classList.add('selected');
+                        } else {
+                            alert('Você pode selecionar no máximo 3 categorias.');
+                        }
+                    }
+                });
+            });
+        }
+        
+        // Processar formulário de edição
+        function setupFormSubmission() {
+            document.getElementById('editProfileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const user = checkLogin();
+                if (!user) return;
+                
+                const formData = {
+                    nome: document.getElementById('nome').value.trim(),
+                    dataNascimento: document.getElementById('dataNascimento').value,
+                    esporteFavorito: document.getElementById('esporteFavorito').value.trim()
+                };
+                
+                // Coletar categorias selecionadas
+                const selectedCategories = Array.from(document.querySelectorAll('.category-item.selected')).map(item => ({
+                    id: item.dataset.category,
+                    nome: item.querySelector('.category-name').textContent
+                }));
+                
+                // Validações
+                const errors = [];
+                
+                if (!formData.nome) {
+                    errors.push('Nome é obrigatório');
+                }
+                
+                if (!formData.dataNascimento) {
+                    errors.push('Data de nascimento é obrigatória');
+                }
+                
+                if (selectedCategories.length === 0) {
+                    errors.push('Selecione pelo menos uma categoria');
+                }
+                
+                if (errors.length > 0) {
+                    showError(errors.join('\n'));
+                    return;
+                }
+                
+                // Adicionar categorias aos dados
+                formData.categorias = selectedCategories;
+                
+                // Atualizar no banco de dados
+                const db = new Database();
+                const updatedUser = db.updateUser(user.email, formData);
+                
+                if (updatedUser) {
+                    // Atualizar sessão
+                    sessionStorage.setItem('currentUser', JSON.stringify({
+                        id: updatedUser.id,
+                        nome: updatedUser.nome,
+                        email: updatedUser.email
+                    }));
+                    
+                    showSuccess();
+                    
+                    // Redirecionar após 2 segundos
+                    setTimeout(() => {
+                        window.location.href = 'esportes.html';
+                    }, 2000);
+                } else {
+                    showError('Erro ao atualizar perfil. Tente novamente.');
+                }
+            });
+        }
+        
+        // Mostrar mensagem de sucesso
+        function showSuccess() {
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+        
+        // Mostrar mensagem de erro
+        function showError(message) {
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('errorMessage').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+        
+        // Carregar dados quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            setupCategorySelection();
+            setupFormSubmission();
+        });
+    </script>
+</body>
+</html>
