@@ -9,7 +9,8 @@ Utiliza integração com **Firebase** para autenticação e gerenciamento de dad
 
 # Imagens 
 
-[Tela Inicial]<img width="1920" height="1080" alt="tela_inicial" src="https://github.com/user-attachments/assets/f18e5e78-a91a-47f1-a34f-26b1fe75220d" />
+[Tela Inicial]<img width="1920" height="1080" alt="tela_inicial" src="https://github.com/user-attachments/assets/6e7aeb19-b74f-4582-b565-a6384c157f76" />
+
 
 [Tela Login]<img width="1920" height="1080" alt="tela_login" src="https://github.com/user-attachments/assets/ed6b2a60-5550-4493-8a95-5de17b4ccd53" />
 
