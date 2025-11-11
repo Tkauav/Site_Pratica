@@ -12,17 +12,23 @@ Utiliza integração com **Firebase** para autenticação e gerenciamento de dad
 [Tela Inicial]<img width="1920" height="1080" alt="tela_inicial" src="https://github.com/user-attachments/assets/6e7aeb19-b74f-4582-b565-a6384c157f76" />
 
 
-[Tela Login]<img width="1920" height="1080" alt="tela_login" src="https://github.com/user-attachments/assets/ed6b2a60-5550-4493-8a95-5de17b4ccd53" />
+[Tela Login]<img width="1920" height="1080" alt="tela_login" src="https://github.com/user-attachments/assets/44842311-e258-4120-a562-fbe6e51cf802" />
 
-[Teela Cadastro]<img width="1920" height="1080" alt="tela_cadastrto" src="https://github.com/user-attachments/assets/5dd1412b-5005-43e3-b5a3-584b8239abbf" />
 
-[Tela portal] <img width="1920" height="1080" alt="tela_portal" src="https://github.com/user-attachments/assets/29a873e6-0371-4fcc-aa14-98b7bd1db64b" />
+[Teela Cadastro]<img width="1920" height="1080" alt="tela_cadastrto" src="https://github.com/user-attachments/assets/0120ad26-7bfc-465e-870a-3fca2283da94" />
 
-[Tela Menu]<img width="1920" height="1080" alt="tela menu" src="https://github.com/user-attachments/assets/2a3aeff8-b2b6-4318-a835-e3ed199b7089" />
 
-[Tela Esportes]<img width="1920" height="1080" alt="tela_perfil" src="https://github.com/user-attachments/assets/3d1b3abf-c3bf-42fa-a2b8-4965cec17f82" />
+[Tela portal]<img width="1920" height="1080" alt="tela_portal" src="https://github.com/user-attachments/assets/5d33f4b0-adba-439d-a7ba-6e82b271ff53" />
 
-[Tela Favoritos]<img width="1920" height="1080" alt="tela_favoritos" src="https://github.com/user-attachments/assets/fb2fe285-3f01-4db1-9222-fe959aea7303" />
+
+[Tela Menu]<img width="1920" height="1080" alt="tela menu" src="https://github.com/user-attachments/assets/d2476c57-1f47-4107-99ba-3736d0b732d3" />
+
+
+[Tela Esportes]<img width="1920" height="1080" alt="tela_perfil" src="https://github.com/user-attachments/assets/064bbb03-888b-44a4-a509-44ed8728d802" />
+
+
+[Tela Favoritos]<img width="1920" height="1080" alt="tela_favoritos" src="https://github.com/user-attachments/assets/74a1b684-3221-473e-a3b4-338dc2066efd" />
+
 
 
 ## 🚀 Funcionalidades
@@ -38,7 +44,7 @@ Utiliza integração com **Firebase** para autenticação e gerenciamento de dad
 ## 🧩 Estrutura do Projeto
 
 ```
-site_10_11_2005/
+Site_Pratica/
 │
 ├── index.html              # Página inicial
 ├── login.html              # Página de login
@@ -72,7 +78,7 @@ site_10_11_2005/
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seuusuario/site_10_11_2005.git
+   git clone https://github.com/seuusuario/Site_Pratica.git
    ```
 2. Abra o arquivo `index.html` no navegador.
 3. (Opcional) Configure o Firebase conforme o arquivo `FIREBASE_SETUP.md`.
